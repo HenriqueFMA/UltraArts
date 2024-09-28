@@ -4,19 +4,44 @@ import React, { useState } from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Feather from '@expo/vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { firestore } from '../FireBase/firebaseConfig';
 
-function Realizar_cadastro() {
-    // Fazer a função e adicionar caminho para tela de Login caso a o cadastro  seja bem sucedido
-}
+
 const Cadastro: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [nomeCompleto, setNomeCompleto] = useState<string>('');
     const [usuario, setUsuario] = useState<string>('');
     const [dataNascimento, setDataNascimento] = useState<string>('');
     const [senha, setSenha] = useState<string>('');
-
+    
     const navigation = useNavigation(); // Hook de navegação
-
+    
+    const handleRegister = async () => {
+        try {
+          const auth = getAuth();
+          const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+          const Usuario = userCredential.user.uid;
+    
+          await addDoc(collection(firestore, 'Users'), {
+            ID: Usuario,
+            Email: email,
+            Data_de_Nascimento: dataNascimento,
+            Nome_Completo: nomeCompleto,
+            Username: usuario,
+            Following: 0,
+            Followers: 0,
+            Bio: '',
+            N_Posts: 0,
+            IMG_Profile: '',
+            TAG_User: null,
+            CreateAt: new Date(),
+          });
+        }catch(e){
+            console.error(e)
+        }
+    }
     return (
         <KeyboardAvoidingView style={styles.Main}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -85,7 +110,7 @@ const Cadastro: React.FC = () => {
                                     onChangeText={setSenha}
                                 />
                             </View>
-                            <TouchableOpacity style={styles.ButtonCadastro} onPress={Realizar_cadastro}  >
+                            <TouchableOpacity style={styles.ButtonCadastro} onPress={handleRegister}  >
                                 <Text style={styles.ButtonCadastroText}>
                                     CADASTRAR
                                 </Text>
