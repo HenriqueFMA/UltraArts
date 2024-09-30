@@ -12,6 +12,8 @@ import RecuperarSenha from './src/Screens/RecuperacaoDeSenha';
 import { auth } from './src/Screens/FireBase/firebaseConfig'; 
 import useAuth from './src/Hooks/useAuth';
 import Home from './src/Screens/Home';
+import Test from './src/Screens/Test';
+import Profile from './src/Screens/Profile'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -41,7 +43,10 @@ export default function RootLayout() {
     <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme} independent={true}>
       <Stack.Navigator>
         {user ? (
-          <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+          <>
+            <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+            <Stack.Screen options={{ headerShown: false }} name="Profile" component={Profile} />
+          </>
         ) : (
           <>
             <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
