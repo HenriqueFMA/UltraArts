@@ -1,129 +1,69 @@
-import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, Image } from "react-native";
-import { styles } from './style';
+import React, { useState } from "react";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Entypo from "@expo/vector-icons/Entypo";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { styles } from "./style";
+import BarraNavegacao from '../../components/BarraDeNavegacao/Index';
+import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
 import { signOut } from "firebase/auth";
 import { auth } from "../FireBase/firebaseConfig";
-import BarraNegacao from '../../components/BarraDeNavegaca/Index';
-import Feather from '@expo/vector-icons/Feather';
-import { launchImageLibrary } from 'react-native-image-picker';
-import storage from '@react-native-firebase/storage';
-import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+import NewPost from '../NewPost';
+
 
 const Profile: React.FC = () => {
-  const [imageUri, setImageUri] = useState<string | null>(null); 
-  const [uploading, setUploading] = useState(false);
-  const [transferred, setTransferred] = useState(0);
-  const [error, setError] = useState('');
-  const [uploadSuccess, setUploadSuccess] = useState(false);
-
-  // Função para logout
+  const navigation = useNavigation();
+  const netInfo = useNetInfo();
   const handleLogout = async () => {
     await signOut(auth);
   };
-
-  // Função para selecionar a imagem
-  const selectImage = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-      },
-      response => {
-        if (response.didCancel) {
-          console.log('Usuário cancelou a seleção de imagem.');
-        } else if (response.errorCode) {
-          console.log('Erro: ', response.errorMessage);
-          setError(response.errorMessage || 'Erro ao selecionar a imagem.');
-        } else if (response.assets && response.assets[0]?.uri) {
-          const uri = response.assets[0].uri;
-          setImageUri(uri);
-        }
-      }
-    );
-  };
-
-  // Função para fazer upload da imagem
-  const uploadImage = async () => {
-    if (!imageUri) {
-      setError('Selecione uma imagem primeiro!');
-      return;
-    }
-
-    const userId = auth.currentUser?.uid;
-    if (!userId) {
-      setError('Usuário não autenticado!');
-      return;
-    }
-
-    const fileName = `${userId}_profileImage.jpg`; 
-    const storageRef = storage().ref(`profileImages/${fileName}`);
-
-    setUploading(true);
-    setTransferred(0);
-
-    const task = storageRef.putFile(imageUri);
-
-    // Monitorar o progresso do upload
-    task.on('state_changed', snapshot => {
-      setTransferred(Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100));
-    });
-
-    try {
-      await task;
-      const imageUrl = await storageRef.getDownloadURL(); // Obtém a URL da imagem
-
-      // Atualizar o Firestore com a URL da imagem
-      await firestore().collection('users').doc(userId).update({
-        profilePicture: imageUrl,
-      });
-
-      setUploading(false);
-      setUploadSuccess(true);
-      console.log('Imagem enviada com sucesso e URL salva no Firestore!');
-    } catch (error) {
-      console.error('Erro ao fazer upload: ', error);
-      setError('Erro ao fazer upload, tente novamente.');
-      setUploading(false);
-    }
-  };
-
   return (
-    <View style={styles.main}>
-      <View style={styles.Header}>
-        <TouchableOpacity style={styles.ButtonTresPontos}>
-          <Feather name="more-vertical" size={30} color="black" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.Card}>
-        <TouchableOpacity onPress={selectImage}>
-          <Text>Selecionar Imagem</Text>
-        </TouchableOpacity>
-
-        {imageUri && (
-          <Image
-            source={{ uri: imageUri }}
-            style={{ width: 100, height: 100, marginTop: 10 }}
+    <View style={styles.container}>
+      <View style={styles.cabecario}>
+        <View style={styles.icons}>
+          <MaterialCommunityIcons
+            name="message"
+            size={24}
+            color="white"
+            style={{ marginRight: 15 }}
           />
-        )}
-
-        {uploading ? (
-          <Text>Enviando imagem... {transferred}% concluído</Text>
-        ) : (
-          <TouchableOpacity onPress={uploadImage} style={styles.uploadButton}>
-            <Text>Fazer Upload da Imagem</Text>
-          </TouchableOpacity>
-        )}
-
-        {uploadSuccess && <Text>Imagem enviada com sucesso!</Text>}
-        {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+          <AntDesign
+            name="heart"
+            size={24}
+            color="white"
+            style={{ marginRight: 10 }}
+          />
+          <Entypo name="dots-three-vertical" size={24} color="white" />
+        </View>
       </View>
+      <View style={styles.conteudo}>
+        <View style={styles.nomeUsuario}>
+          <Text style={styles.textUsuario}>Nome do usuário</Text>
+        </View>
+        <Image
+          source={require("../images/profilepic.png")} // Caminho da sua imagem
+          style={styles.imagemPerfil} // Aplicando estilo para a imagem
+        />
+        <Text style={{fontWeight:'bold'}}>Descrição</Text>
+        <Text>Informações</Text>
+        <View style={styles.segTexto}>
+          <Text style={styles.seguidoresTexto}> X Seguidores</Text>
+          <Text style={styles.seguidoresTexto}> X Seguindo</Text>
+        </View>
+        <TouchableOpacity style={styles.botaoPerfil}>
+          <Text style={styles.textoBotao} onPress={handleLogout}>Editar perfil</Text>
+        </TouchableOpacity>
+        <View style={styles.icons2}>
+          <MaterialCommunityIcons name="grid" size={24} color="black" />
+          <MaterialCommunityIcons name="cart-variant" size={24} color="black" />
+          <FontAwesome6 name="bookmark" size={24} color="black" />
+        </View>
 
-      {/* Barra de navegação */}
-      <BarraNegacao />
-
-      {/* Outros conteúdos do perfil */}
+      </View>
+      <BarraNavegacao />
     </View>
   );
-};
-
+}
 export default Profile;

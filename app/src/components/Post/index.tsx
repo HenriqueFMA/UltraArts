@@ -1,86 +1,128 @@
-import { useEffect, useState } from 'react';
-import { Text, View, Image, TouchableOpacity, Dimensions } from "react-native";
-import { styles } from './styles';
-import React from 'react';
-import Carousel from 'react-native-reanimated-carousel';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import { firebaseApp } from '../../Screens/FireBase/firebaseConfig'; // Certifique-se de configurar corretamente
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import firebase from '@react-native-firebase/app';
+import '@react-native-firebase/firestore';
+import { styles } from './stelys';
 
-const Post: React.FC<{ navigation: any, postId: string }> = ({ navigation, postId }) => {
-    const { width } = Dimensions.get('window');
-    const [images, setImages] = useState<string[]>([]);
-    const [error, setError] = useState<string | null>(null);
 
-    // Função para buscar as imagens do Firestore
-    useEffect(() => {
-        const fetchPostData = async () => {
-            try {
-                const db = getFirestore(firebaseApp);
-                const postRef = doc(db, 'Posts', postId); // Substitua 'Posts' pelo nome da sua coleção
-                const postSnap = await getDoc(postRef);
-
-                if (postSnap.exists()) {
-                    const postData = postSnap.data();
-                    setImages(postData.Imagem || []); // Atualize o estado com o array de imagens
-                } else {
-                    console.log("Nenhum documento encontrado!");
-                }
-            } catch (error) {
-                setError('Erro ao buscar dados.');
-                console.error("Erro ao buscar dados do Firestore:", error);
-            }
-        };
-
-        fetchPostData();
-    }, [postId]);
-
-    return (
-        <View>
-            <View style={styles.Heade}>
-                <TouchableOpacity>
-                    <Image
-                        style={styles.FotoPerfil}
-                        // Adicione a fonte da imagem aqui, se necessário
-                    />
-                    <Text>User_Name</Text>
-                </TouchableOpacity>
-            </View>
-            
-            <View style={{ flex: 1 }}>
-                {error ? (
-                    <Text>{error}</Text>
-                ) : (
-                    <Carousel
-                        loop
-                        width={width}
-                        height={width / 2}
-                        autoPlay={true}
-                        data={images} // Use o array de imagens do Firestore
-                        scrollAnimationDuration={1000}
-                        onSnapToItem={(index) => console.log('current index:', index)}
-                        renderItem={({ item }) => (
-                            <View
-                                style={{
-                                    flex: 1,
-                                    borderWidth: 1,
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <Image
-                                    source={{ uri: item }} // Renderize a imagem usando a URI do Firestore
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        resizeMode: 'cover',
-                                    }}
-                                />
-                            </View>
-                        )}
-                    />
-                )}
-            </View>
-        </View>
-    );
+// Interface para os dados do usuário
+interface UserData {
+  username: string | null;
+  profilePicture: string;
 }
 
-export default Post;
+// Interface para os dados do post
+interface PostData {
+  userId: string;
+  title: string;
+  content: string[]; // URLs das imagens do post
+  createdAt: Date;
+}
+
+interface PostComponentProps {
+  Id: string;
+}
+
+const PostComponent: React.FC<PostComponentProps> = ({ Id }) => {
+  const [postData, setPostData] = useState<PostData | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Função para buscar os dados do post
+  const fetchPostData = async (postId: string): Promise<PostData | null> => {
+    try {
+      const postDoc = await firebase.firestore().collection('posts').doc(postId).get();
+      if (postDoc.exists) {
+        const data = postDoc.data();
+        return {
+          userId: data?.userId ?? '',
+          title: data?.title ?? 'Sem título',
+          content: data?.content ?? [],
+          createdAt: data?.createdAt?.toDate() ?? new Date(),
+        };
+      }
+    } catch (error) {
+      console.error("Erro ao obter dados do post:", error);
+    }
+    return null;
+  };
+
+  // Função para buscar os dados do usuário
+  const fetchUserData = async (userId: string): Promise<UserData | null> => {
+    try {
+      const userDoc = await firebase.firestore().collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        const data = userDoc.data();
+        return {
+          username: data?.username ?? 'Usuário desconhecido',
+          profilePicture: data?.profilePicture ?? 'https://via.placeholder.com/150',
+        };
+      }
+    } catch (error) {
+      console.error("Erro ao obter dados do usuário:", error);
+    }
+    return null;
+  };
+
+  // useEffect para buscar os dados do post e do usuário
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const post = await fetchPostData(postId);
+      if (post) {
+        setPostData(post);
+        const user = await fetchUserData(post.userId);
+        setUserData(user);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, [postId]);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  if (!postData || !userData) {
+    return <Text>Dados do post ou do usuário não encontrados.</Text>;
+  }
+
+  return (
+    <View style={styles.postContainer}>
+      {/* Header com Foto e Nome do Usuário */}
+      <View style={styles.postHeader}>
+        <Image source={{ uri: userData.profilePicture }} style={styles.profileImage} />
+        <Text style={styles.username}>{userData.username}</Text>
+      </View>
+
+      {/* Imagens do Post */}
+      <ScrollView horizontal pagingEnabled style={styles.imageCarousel}>
+        {postData.content.map((imageUri, index) => (
+          <Image key={index} source={{ uri: imageUri }} style={styles.postImage} />
+        ))}
+      </ScrollView>
+
+      {/* Descrição e Data */}
+      <View style={styles.postDetails}>
+        <Text style={styles.postTitle}>{postData.title}</Text>
+        <Text style={styles.postDate}>{postData.createdAt.toLocaleDateString()}</Text>
+      </View>
+
+      {/* Botões de Ação */}
+      <View style={styles.actionButtons}>
+        <TouchableOpacity accessible accessibilityLabel="Curtir">
+          <FontAwesome name="heart-o" size={24} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity accessible accessibilityLabel="Comentar">
+          <FontAwesome name="comment-o" size={24} color="black" />
+        </TouchableOpacity>
+        <TouchableOpacity accessible accessibilityLabel="Compartilhar">
+          <FontAwesome name="share" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default PostComponent;

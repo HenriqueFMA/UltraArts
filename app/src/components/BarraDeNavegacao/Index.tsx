@@ -1,14 +1,26 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native'; 
+import { useNavigation, useRoute,RouteProp } from '@react-navigation/native'; 
 import Entypo from '@expo/vector-icons/Entypo';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { styles } from './Style';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-const BarraNegacao: React.FC = () => {
-  const navigation: any = useNavigation(); // Usando 'any' temporariamente
-  const route = useRoute();
+type RootStackParamList = {
+  Home: undefined;
+  Details: { id: number };
+  Profile: undefined;
+  Cart: undefined;
+  Location: undefined;
+};
+
+type NavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+type RouteProps = RouteProp<RootStackParamList, 'Home'>;
+
+const BarraNavegacao: React.FC = () => {
+  const navigation = useNavigation<NavigationProp>();
+  const route = useRoute<RouteProps>();
 
   const getColor = (routeName: string) => {
     return route.name === routeName ? 'blue' : 'black'; 
@@ -35,4 +47,4 @@ const BarraNegacao: React.FC = () => {
   );
 };
 
-export default BarraNegacao;
+export default BarraNavegacao;

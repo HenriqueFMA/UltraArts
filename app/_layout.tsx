@@ -1,43 +1,20 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { useColorScheme } from 'react-native';
+import Home from './src/Screens//Home';
+import Profile from './src/Screens//Profile';
+import NewPost from './src/Screens/NewPost';
 import Login from './src/Screens/Login';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import Cadastro from './src/Screens/Cadasto';
 import RecuperarSenha from './src/Screens/RecuperacaoDeSenha';
-import { auth } from './src/Screens/FireBase/firebaseConfig'; 
 import useAuth from './src/Hooks/useAuth';
-import Home from './src/Screens/Home';
-import Test from './src/Screens/Test';
-import Profile from './src/Screens/Profile'
+import firebase from 'firebase/app';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
-export default function RootLayout() {
+export default function App() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  // Verificar se as fontes foram carregadas antes de esconder a SplashScreen
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  // Carregar o estado de autenticação do usuário
-  const { user } = useAuth();
-
-  if (!loaded) {
-    return null; // Retornar nulo até que as fontes sejam carregadas
-  }
+  const { user } = useAuth();// Substitua pela lógica real de autenticação
 
   return (
     <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme} independent={true}>
@@ -46,6 +23,8 @@ export default function RootLayout() {
           <>
             <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
             <Stack.Screen options={{ headerShown: false }} name="Profile" component={Profile} />
+            <Stack.Screen options={{ headerShown: false }} name="NewPost" component={NewPost} />
+
           </>
         ) : (
           <>

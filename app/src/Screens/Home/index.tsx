@@ -1,31 +1,17 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
-import { styles } from './styles';
-import { signOut } from "firebase/auth";
-import { auth } from "../FireBase/firebaseConfig";
-import Post from '../../components/Post';
-import BarraNegacao from '../../components/BarraDeNavegaca/Index';
-import { useNavigation } from '@react-navigation/native'; // Import do hook de navegação
+import { View } from 'react-native';
+import PostComponent from '../../components/Post';
+import firebase from '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
 
-const Home: React.FC = () => {
-  const navigation = useNavigation(); // Usando o hook de navegação
-
-  const handleLogout = async () => {
-    await signOut(auth);
-  };
-
-  const postId = '12345';
+const PostScreen = () => {
+  const Id = 'v6C5IPILjeZrTmc7qpCg';
 
   return (
-    <View style={styles.main}>
-      <TouchableOpacity style={styles.ButtonEntrar} onPress={handleLogout}>
-        <Text>Sair</Text>
-      </TouchableOpacity>
-      
-      
-      <BarraNegacao />
+    <View style={{ flex: 1 }}>
+      <PostComponent postId={Id} />
     </View>
   );
 };
 
-export default Home;
+export default PostScreen;

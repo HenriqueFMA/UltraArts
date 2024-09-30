@@ -18,5 +18,19 @@ export const styles=StyleSheet.create({
         backgroundColor: '##ffffff',
         flex: 1,
     },
+    Erromensage:{
+        backgroundColor: '#ff0000',
+        alignItems: 'center',
+         
+        height: 100,    
 
+    },
+    ErromensageText:{
+        marginTop: 70,
+
+    },
+    errorText:{
+        color: '#ff0000',
+        textAlign: 'center',
+    }
 });
