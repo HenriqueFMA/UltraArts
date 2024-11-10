@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, TouchableOpacity, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { createPost } from '../FireBase/PostService'; // Ajuste o caminho conforme necessário
+import { createPost } from '../../Data_Control/PostService'; // Ajuste o caminho conforme necessário
 import { styles } from './style'; // Ajuste o caminho conforme necessário
 import { auth } from "../FireBase/firebaseConfig"; // Ajuste o caminho conforme necessário
 

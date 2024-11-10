@@ -5,7 +5,6 @@ import firebase from '@react-native-firebase/app';
 import '@react-native-firebase/firestore';
 import { styles } from './stelys';
 
-
 // Interface para os dados do usuário
 interface UserData {
   username: string | null;
@@ -21,7 +20,7 @@ interface PostData {
 }
 
 interface PostComponentProps {
-  Id: string;
+  Id: string; // O ID do post que queremos exibir
 }
 
 const PostComponent: React.FC<PostComponentProps> = ({ Id }) => {
@@ -69,7 +68,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ Id }) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const post = await fetchPostData(postId);
+      const post = await fetchPostData(Id); // Usando o Id recebido via props
       if (post) {
         setPostData(post);
         const user = await fetchUserData(post.userId);
@@ -78,7 +77,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ Id }) => {
       setLoading(false);
     };
     fetchData();
-  }, [postId]);
+  }, [Id]);
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
