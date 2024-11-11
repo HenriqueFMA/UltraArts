@@ -1,21 +1,20 @@
 import { db, storage, auth } from "../Screens/FireBase/firebaseConfig";
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import firebase from 'firebase/app';
 
-
-// Defina uma interface para os dados do post
+// Definindo a interface para os dados do post
 interface PostData {
-  id?: string; // Para incluir o campo 'id'
-  userId: string; // Adicione esta linha para garantir que o userId seja parte do post
+  id?: string;
+  userId: string;
   title: string;
   content: string[];
-  createdAt?: string; // Use string para armazenar no formato ISO
+  createdAt?: string;
   likes?: number;
 }
 
 // Função para fazer upload de uma imagem para o Firebase Storage
-const uploadImage = async (userId: string, imageUri: string): Promise<string> => {
+// No arquivo PostService.tsx
+export const uploadImage = async (userId: string, imageUri: string): Promise<string> => {
   console.log(`Iniciando upload da imagem para o usuário ${userId} com URI: ${imageUri}`);
   const response = await fetch(imageUri);
   const blob = await response.blob();
@@ -50,7 +49,7 @@ export const createPost = async (postData: Omit<PostData, 'id'>) => {
     const docRef = await addDoc(collection(db, "Posts"), {
       ...postData,
       userId,
-      createdAt: new Date().toISOString(), // Armazena como string no formato ISO
+      createdAt: new Date().toISOString(),
       likes: postData.likes || 0,
     });
     console.log("Post criado com sucesso com ID:", docRef.id);
@@ -66,14 +65,14 @@ export const getPosts = async (): Promise<PostData[] | null> => {
     const querySnapshot = await getDocs(collection(db, "Posts"));
     const posts: PostData[] = [];
     querySnapshot.forEach((doc) => {
-      const data = doc.data() as Omit<PostData, 'id'>; // Tipo do dado sem 'id'
+      const data = doc.data() as Omit<PostData, 'id'>;
       posts.push({ id: doc.id, ...data });
     });
     console.log("Posts obtidos com sucesso:", posts);
     return posts;
   } catch (error) {
     console.error("Erro ao buscar posts:", error);
-    return null; // Retorna null em caso de erro
+    return null;
   }
 };
 

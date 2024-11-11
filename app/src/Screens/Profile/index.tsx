@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -9,29 +9,36 @@ import BarraNavegacao from '../../components/BarraDeNavegacao/Index';
 import { signOut } from "firebase/auth";
 import { auth } from "../FireBase/firebaseConfig";
 import { useNavigation } from '@react-navigation/native';
-import { getUserProfile } from '../../Data_Control/userServise'; // Importe a função getUserProfile
+import { getUserProfile } from '../../Data_Control/userServise';
 import { useNetInfo } from '@react-native-community/netinfo';
+
+interface UserData {
+  username: string;
+  profilePicture?: string;
+  followers: number;
+  following: number;
+  description?: string;
+  fullName: string;
+}
 
 const Profile: React.FC = () => {
   const navigation = useNavigation();
   const netInfo = useNetInfo();
-  
-  // States para armazenar os dados do usuário
-  const [userData, setUserData] = useState<any>(null);
+
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null); // Estado para erros
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogout = async () => {
     await signOut(auth);
   };
 
-  // Função para buscar os dados do usuário ao montar o componente
   useEffect(() => {
     const fetchUserData = async () => {
-      const userId = auth.currentUser?.uid; // Obtém o ID do usuário autenticado
+      const userId = auth.currentUser?.uid;
       if (userId) {
         try {
-          const fetchedUserData = await getUserProfile(userId); // Chama a função getUserProfile
+          const fetchedUserData = await getUserProfile(userId);
           if (fetchedUserData) {
             setUserData(fetchedUserData);
           } else {
@@ -49,7 +56,6 @@ const Profile: React.FC = () => {
     fetchUserData();
   }, []);
 
-  // Exibe a mensagem de erro ou de carregamento
   if (loading) {
     return (
       <View style={styles.container}>
@@ -58,7 +64,6 @@ const Profile: React.FC = () => {
     );
   }
 
-  // Caso haja erro ao carregar os dados
   if (error) {
     return (
       <View style={styles.container}>
@@ -67,7 +72,6 @@ const Profile: React.FC = () => {
     );
   }
 
-  // Caso não encontre dados do usuário
   if (!userData) {
     return (
       <View style={styles.container}>
@@ -76,7 +80,6 @@ const Profile: React.FC = () => {
     );
   }
 
-  // Verifica se a rede está disponível
   if (!netInfo.isConnected) {
     return (
       <View style={styles.container}>
@@ -89,34 +92,28 @@ const Profile: React.FC = () => {
     <View style={styles.container}>
       <View style={styles.cabecario}>
         <View style={styles.icons}>
-          <MaterialCommunityIcons
-            name="message"
-            size={24}
-            color="white"
-            style={{ marginRight: 15 }}
-          />
-          <AntDesign
-            name="heart"
-            size={24}
-            color="white"
-            style={{ marginRight: 10 }}
-          />
+          <MaterialCommunityIcons name="message" size={24} color="white" style={{ marginRight: 15 }} />
+          <AntDesign name="heart" size={24} color="white" style={{ marginRight: 10 }} />
           <Entypo name="dots-three-vertical" size={24} color="white" />
         </View>
       </View>
       <View style={styles.conteudo}>
         <View style={styles.nomeUsuario}>
-          <Text style={styles.textUsuario}>{userData.username}</Text> {/* Exibe o nome de usuário */}
+          <Text style={styles.textUsuario}>{userData.username}</Text>
         </View>
         <Image
-          source={{ uri: userData.profilePicture || "../images/profilepic.png" }} // Usa a imagem do perfil
+          source={
+            userData.profilePicture
+              ? { uri: userData.profilePicture }
+              : require("../images/profilepic.png")
+          }
           style={styles.imagemPerfil}
         />
         <Text style={{ fontWeight: 'bold' }}>Descrição</Text>
-        <Text>Informações</Text>
+        <Text>{userData.description || "Informações não disponíveis"}</Text>
         <View style={styles.segTexto}>
-          <Text style={styles.seguidoresTexto}>{userData.followers} Seguidores</Text> {/* Exibe o número de seguidores */}
-          <Text style={styles.seguidoresTexto}>{userData.following} Seguindo</Text> {/* Exibe o número de seguindo */}
+          <Text style={styles.seguidoresTexto}>{userData.followers} Seguidores</Text>
+          <Text style={styles.seguidoresTexto}>{userData.following} Seguindo</Text>
         </View>
         <TouchableOpacity style={styles.botaoPerfil} onPress={handleLogout}>
           <Text style={styles.textoBotao}>Editar perfil</Text>
@@ -126,6 +123,9 @@ const Profile: React.FC = () => {
           <MaterialCommunityIcons name="cart-variant" size={24} color="black" />
           <FontAwesome6 name="bookmark" size={24} color="black" />
         </View>
+      <TouchableOpacity style={styles.navigationButton} onPress={() => navigation.navigate('NewPost')}>
+  <Text style={styles.navigationButtonText}>Settings</Text>
+</TouchableOpacity>
       </View>
       <BarraNavegacao />
     </View>

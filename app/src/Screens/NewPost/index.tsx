@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, TouchableOpacity, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { createPost } from '../../Data_Control/PostService'; // Ajuste o caminho conforme necessário
+import { createPost, uploadImage } from '../../Data_Control/PostService'; // Certifique-se de importar a função de upload
 import { styles } from './style'; // Ajuste o caminho conforme necessário
-import { auth } from "../FireBase/firebaseConfig"; // Ajuste o caminho conforme necessário
+import { auth, firestore } from "../FireBase/firebaseConfig"; // Ajuste o caminho conforme necessário
+import { doc } from 'firebase/firestore';
 
 const CreatePostScreen: React.FC = () => {
   const [title, setTitle] = useState('');
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const userId = auth.currentUser?.uid;
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -32,7 +34,7 @@ const CreatePostScreen: React.FC = () => {
     setLoading(true);
     setError('');
 
-    const userId = auth.currentUser?.uid; // Obtém o ID do usuário autenticado
+    const userId = auth.currentUser?.uid;
 
     if (!userId) {
       setError('Usuário não autenticado.');
@@ -41,7 +43,29 @@ const CreatePostScreen: React.FC = () => {
     }
 
     try {
-      await createPost({ title, content: images }); // Passa os dados do post diretamente
+      const imageUrls: string[] = [];
+      
+      // Faz upload das imagens e armazena as URLs
+      for (let imageUri of images) {
+        const url = await uploadImage(userId, imageUri);
+        if (url) {
+          imageUrls.push(url);
+        }
+      }
+
+      // Gera um ID único para o post
+      const postId = doc(firestore, 'posts').id;
+
+      // Agora, cria o post com as URLs das imagens, o userId e o postId
+      const postData = {
+        title,
+        content: imageUrls,
+        userId,
+        postId, // ID único do post
+      };
+
+      await createPost(postData);
+
       setTitle('');
       setImages([]);
       alert('Post criado com sucesso!');

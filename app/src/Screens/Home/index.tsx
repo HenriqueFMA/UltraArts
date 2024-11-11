@@ -1,28 +1,34 @@
 import React from 'react';
-import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Image} from "react-native";
-import { signOut } from "firebase/auth";
-import { auth } from "../FireBase/firebaseConfig";
-import PostComponent from '../../components/Post';
-import firebase from '@react-native-firebase/app';
-import firestore from '@react-native-firebase/firestore';
+import { Text, View, TouchableOpacity } from 'react-native';
+import { signOut } from 'firebase/auth';
+import { auth } from '../FireBase/firebaseConfig';
 import BarraNavegacao from '../../components/BarraDeNavegacao/Index';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationProp } from '@react-navigation/native';
+import PostComponent from '../../components/Post'
+type RootStackParamList = {
+  Home: undefined;
+  Profile: undefined;
+  NewPost: undefined;
+};
 
+type HomeScreenNavigationProp = NavigationProp<RootStackParamList, 'Home'>;
 
-const PostScreen = () => {
-  const handleLogout = async ()=>{
-    await signOut(auth);
-}
-
+const Home: React.FC = () => {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+  
   return (
     <View style={{ flex: 1 }}>
-      <PostComponent Id="v6C5IPILjeZrTmc7qpCg" />
-      <TouchableOpacity onPress={handleLogout}>
-                <Text>sair</Text>
-            </TouchableOpacity>
-      <BarraNavegacao/>
+      
+        <PostComponent Id="BPhywjA1uwbYIVxFWRZATtGQruF2"
+/>
+   
 
+      
+
+      <BarraNavegacao />
     </View>
   );
 };
 
-export default PostScreen;
+export default Home;

@@ -1,23 +1,21 @@
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth } from "../Screens/FireBase/firebaseConfig";
+import { User, onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../Screens/FireBase/firebaseConfig'; // Certifique-se de que o caminho esteja correto
 
-export default function useAuth() {
-  // Atualize o tipo para aceitar tanto 'User' quanto 'null'
+const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      console.log('Got User=', user);
-      if (user) {
-        setUser(user);  // 'user' agora tem o tipo correto
-      } else {
-        setUser(null);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
     });
 
-    return unsub; // Limpar o listener quando o componente desmontar
-  }, []); // Executar apenas uma vez quando o componente monta
+    return unsubscribe; // Limpa o listener ao desmontar o componente
+  }, []);
 
-  return { user };
-}
+  return { user, loading };
+};
+
+export default useAuth;

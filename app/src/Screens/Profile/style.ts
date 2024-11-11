@@ -76,4 +76,19 @@ export const styles = StyleSheet.create({
     padding: 10,
     marginTop: "5%",
   },
+  navigationButton: {
+    backgroundColor: '#6200EE', // Cor de fundo do botão
+    paddingVertical: 10,         // Padding vertical para aumentar a área clicável
+    paddingHorizontal: 20,       // Padding horizontal para aumentar a área clicável
+    borderRadius: 5,            // Bordas arredondadas
+    alignItems: 'center',       // Alinha o texto horizontalmente
+    justifyContent: 'center',   // Alinha o texto verticalmente
+    marginTop: 20,              // Espaçamento superior
+  },
+  navigationButtonText: {
+    color: '#ffffff',           // Cor do texto
+    fontSize: 16,               // Tamanho do texto
+    fontWeight: 'bold',         // Peso da fonte
+  },
+
 });

@@ -9,6 +9,7 @@ import Cadastro from './src/Screens/Cadasto';
 import RecuperarSenha from './src/Screens/RecuperacaoDeSenha';
 import useAuth from './src/Hooks/useAuth';
 import firebase from 'firebase/app';
+import React from 'react';
 
 const Stack = createStackNavigator();
 
