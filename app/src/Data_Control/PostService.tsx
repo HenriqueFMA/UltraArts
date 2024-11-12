@@ -1,5 +1,5 @@
-import { db, storage, auth } from "../Screens/FireBase/firebaseConfig";
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { firestore, storage, auth } from "../Screens/FireBase/firebaseConfig";
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc ,setDoc} from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Definindo a interface para os dados do post
@@ -27,7 +27,10 @@ export const uploadImage = async (userId: string, imageUri: string): Promise<str
 };
 
 // Função para criar um novo post
-export const createPost = async (postData: Omit<PostData, 'id'>) => {
+// Atualize a função `createPost` para aceitar o `postId`
+
+// Função para criar um novo post com postId
+export const createPost = async (postData: Omit<PostData, 'id'>, postId: string) => {
   const userId = auth.currentUser?.uid;
 
   if (!userId) {
@@ -46,23 +49,27 @@ export const createPost = async (postData: Omit<PostData, 'id'>) => {
   }
 
   try {
-    const docRef = await addDoc(collection(db, "Posts"), {
+    const docRef = doc(collection(firestore, "Posts"), postId); // Definindo o ID personalizado
+    await setDoc(docRef, {
       ...postData,
       userId,
       createdAt: new Date().toISOString(),
       likes: postData.likes || 0,
+      postId, // Incluindo o campo postId no documento
     });
-    console.log("Post criado com sucesso com ID:", docRef.id);
+    console.log("Post criado com sucesso com ID:", postId);
   } catch (error) {
     console.error("Erro ao criar post:", error);
   }
 };
 
+
+
 // Função para obter todos os posts
 export const getPosts = async (): Promise<PostData[] | null> => {
   console.log("Iniciando busca de todos os posts.");
   try {
-    const querySnapshot = await getDocs(collection(db, "Posts"));
+    const querySnapshot = await getDocs(collection(firestore, "Posts"));
     const posts: PostData[] = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data() as Omit<PostData, 'id'>;
@@ -80,7 +87,7 @@ export const getPosts = async (): Promise<PostData[] | null> => {
 export const updatePost = async (postId: string, updatedData: Partial<PostData>) => {
   console.log(`Iniciando atualização do post ${postId} com dados:`, updatedData);
   try {
-    const postRef = doc(db, "Posts", postId);
+    const postRef = doc(firestore, "Posts", postId);
     await updateDoc(postRef, updatedData);
     console.log("Post atualizado com sucesso.");
   } catch (error) {
@@ -92,7 +99,7 @@ export const updatePost = async (postId: string, updatedData: Partial<PostData>)
 export const deletePost = async (postId: string) => {
   console.log(`Iniciando deleção do post ${postId}`);
   try {
-    const postRef = doc(db, "Posts", postId);
+    const postRef = doc(firestore, "Posts", postId);
     await deleteDoc(postRef);
     console.log("Post deletado com sucesso.");
   } catch (error) {
