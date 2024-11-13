@@ -1,7 +1,17 @@
 import { firestore } from '../Screens/FireBase/firebaseConfig';
 import { collection, doc, getDoc } from 'firebase/firestore';
 
-export const getPost = async (postId: string) => {
+interface PostData {
+  content: string[];
+  createdAt: Date;
+  likes: number;
+  postId: string;
+  title: string;
+  userId: string;
+}
+
+// Função para buscar um post específico no Firestore
+export const getPost = async (postId: string): Promise<PostData | null> => {
   try {
     console.log(`Buscando post com ID: ${postId}`);
     const postRef = doc(collection(firestore, 'Posts'), postId);
@@ -11,7 +21,7 @@ export const getPost = async (postId: string) => {
       const postData = postDoc.data();
       return {
         content: postData?.content || [],
-        createdAt: postData?.createdAt?.toDate() || new Date(),
+        createdAt: postData?.createdAt?.toDate?.() || new Date(),
         likes: postData?.likes || 0,
         postId: postData?.postId || '',
         title: postData?.title || 'Sem título',

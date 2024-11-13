@@ -1,5 +1,5 @@
 import { firestore, storage, auth } from "../Screens/FireBase/firebaseConfig";
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc ,setDoc} from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Definindo a interface para os dados do post
@@ -8,28 +8,32 @@ interface PostData {
   userId: string;
   title: string;
   content: string[];
-  createdAt?: string;
+  createdAt?: string | Date;
   likes?: number;
+  postId?: string;
 }
 
 // Função para fazer upload de uma imagem para o Firebase Storage
-// No arquivo PostService.tsx
 export const uploadImage = async (userId: string, imageUri: string): Promise<string> => {
   console.log(`Iniciando upload da imagem para o usuário ${userId} com URI: ${imageUri}`);
-  const response = await fetch(imageUri);
-  const blob = await response.blob();
-  const uniqueName = `${userId}_${Date.now()}`;
-  const storageRef = ref(storage, `images/${userId}/${uniqueName}`);
-  await uploadBytes(storageRef, blob);
-  const downloadURL = await getDownloadURL(storageRef);
-  console.log(`Imagem carregada com sucesso: ${downloadURL}`);
-  return downloadURL;
+  
+  try {
+    const response = await fetch(imageUri);
+    const blob = await response.blob();
+    const uniqueName = `${userId}_${Date.now()}`;
+    const storageRef = ref(storage, `images/${userId}/${uniqueName}`);
+    
+    await uploadBytes(storageRef, blob);
+    const downloadURL = await getDownloadURL(storageRef);
+    console.log(`Imagem carregada com sucesso: ${downloadURL}`);
+    return downloadURL;
+  } catch (error) {
+    console.error("Erro ao fazer upload da imagem:", error);
+    throw error;
+  }
 };
 
-// Função para criar um novo post
-// Atualize a função `createPost` para aceitar o `postId`
-
-// Função para criar um novo post com postId
+// Função para criar um novo post com ID personalizado
 export const createPost = async (postData: Omit<PostData, 'id'>, postId: string) => {
   const userId = auth.currentUser?.uid;
 
@@ -63,18 +67,19 @@ export const createPost = async (postData: Omit<PostData, 'id'>, postId: string)
   }
 };
 
-
-
 // Função para obter todos os posts
 export const getPosts = async (): Promise<PostData[] | null> => {
   console.log("Iniciando busca de todos os posts.");
+  
   try {
     const querySnapshot = await getDocs(collection(firestore, "Posts"));
     const posts: PostData[] = [];
+    
     querySnapshot.forEach((doc) => {
       const data = doc.data() as Omit<PostData, 'id'>;
       posts.push({ id: doc.id, ...data });
     });
+    
     console.log("Posts obtidos com sucesso:", posts);
     return posts;
   } catch (error) {
@@ -86,6 +91,7 @@ export const getPosts = async (): Promise<PostData[] | null> => {
 // Função para atualizar um post
 export const updatePost = async (postId: string, updatedData: Partial<PostData>) => {
   console.log(`Iniciando atualização do post ${postId} com dados:`, updatedData);
+  
   try {
     const postRef = doc(firestore, "Posts", postId);
     await updateDoc(postRef, updatedData);
@@ -98,11 +104,44 @@ export const updatePost = async (postId: string, updatedData: Partial<PostData>)
 // Função para deletar um post
 export const deletePost = async (postId: string) => {
   console.log(`Iniciando deleção do post ${postId}`);
+  
   try {
     const postRef = doc(firestore, "Posts", postId);
     await deleteDoc(postRef);
     console.log("Post deletado com sucesso.");
   } catch (error) {
     console.error("Erro ao deletar post:", error);
+  }
+};
+
+// Função para obter um post específico
+export const getPost = async (postId: string): Promise<PostData | null> => {
+  if (!postId) {
+    console.error('Erro: ID do post inválido');
+    return null;
+  }
+
+  try {
+    console.log(`Buscando post com ID: ${postId}`);
+    const postRef = doc(collection(firestore, 'Posts'), postId);
+    const postDoc = await getDoc(postRef);
+
+    if (postDoc.exists()) {
+      const postData = postDoc.data();
+      return {
+        content: postData?.content || [],
+        createdAt: postData?.createdAt?.toDate?.() || new Date(),
+        likes: postData?.likes || 0,
+        postId: postData?.postId || postId,
+        title: postData?.title || 'Sem título',
+        userId: postData?.userId || ''
+      };
+    } else {
+      console.log("Não foi encontrado o documento do post");
+      return null;
+    }
+  } catch (error) {
+    console.error('Erro ao obter dados do post:', error);
+    throw new Error('Erro ao carregar os dados do post.');
   }
 };
