@@ -2,6 +2,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createStackNavigator } from '@react-navigation/stack';
 import { useColorScheme } from 'react-native';
 import Home from './src/Screens//Home';
+import Shop from './src/Screens//Shop';
 import Profile from './src/Screens//Profile';
 import NewPost from './src/Screens/NewPost';
 import Login from './src/Screens/Login';
@@ -23,6 +24,7 @@ export default function App() {
         {user ? (
           <>
             <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+            <Stack.Screen options={{ headerShown: false }} name="Shop" component={Shop} />
             <Stack.Screen options={{ headerShown: false }} name="Profile" component={Profile} />
             <Stack.Screen options={{ headerShown: false }} name="NewPost" component={NewPost} />
 
