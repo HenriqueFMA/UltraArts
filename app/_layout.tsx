@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import React from 'react'; 
+=======
+>>>>>>> origin/Front
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -13,7 +16,11 @@ import RecuperarSenha from './src/Screens/RecuperacaoDeSenha';
 import { auth } from './src/Screens/FireBase/firebaseConfig'; 
 import useAuth from './src/Hooks/useAuth';
 import Home from './src/Screens/Home';
+<<<<<<< HEAD
 import Profile from './src/Screens/Profile'
+=======
+
+>>>>>>> origin/Front
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -48,7 +55,10 @@ export default function RootLayout() {
             <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
             <Stack.Screen options={{ headerShown: false }} name="Cadastro" component={Cadastro} />
             <Stack.Screen options={{ headerShown: false }} name="RecuperarSenha" component={RecuperarSenha} />
+<<<<<<< HEAD
             <Stack.Screen options={{ headerShown: false }} name="Profile" component={Profile} />
+=======
+>>>>>>> origin/Front
           </>
         )}
       </Stack.Navigator>

@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Image } from "react-native";
+=======
+import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Image} from "react-native";
+>>>>>>> origin/Front
 import { styles } from './styles';
 import React, { useState } from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { auth } from "../FireBase/firebaseConfig";
+<<<<<<< HEAD
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login: React.FC<{ navigation: any }> = ({ navigation }) => {
@@ -29,25 +34,65 @@ const Login: React.FC<{ navigation: any }> = ({ navigation }) => {
             setErrorMessage("Por favor, preencha todos os campos.");  // Caso o email ou senha estejam vazios
         }
     }
+=======
+import {signInWithEmailAndPassword} from 'firebase/auth';
+
+
+const Login: React.FC<{ navigation: any }> = ({ navigation }) => {
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+    };
+    const handleSubmit = async ()=>{
+        if(email && senha){
+            try{
+                await signInWithEmailAndPassword(auth,email,senha);
+            }catch(erro){
+                console.log("erro");
+
+            }
+        }
+    }
+    function verificar_Login() {
+    }
+    
+>>>>>>> origin/Front
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.Main}
         >
+<<<<<<< HEAD
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <Image
                         style={styles.UltraLogo}
                         source={require('../images/logo ULTRART.png')}
                     />
+=======
+         
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <Image
+                      style={styles.UltraLogo}
+
+        source={require('../images/logo ULTRART.png')}
+      />
+>>>>>>> origin/Front
                     <View style={styles.container}>
                         <View style={styles.CardLogin}>
                             <Text style={styles.TextH1}>Bora entrar?</Text>
                             <Text>Faça login para iniciar</Text>
+<<<<<<< HEAD
 
                             {/* Exibe a mensagem de erro se houver */}
                             {errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
 
+=======
+>>>>>>> origin/Front
                             <Text style={styles.Text}>Email:</Text>
                             <TextInput
                                 style={styles.inputEmail}
@@ -57,7 +102,10 @@ const Login: React.FC<{ navigation: any }> = ({ navigation }) => {
                                 value={email}
                                 onChangeText={setEmail}
                             />
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/Front
                             <Text style={styles.Text}>Senha:</Text>
                             <View style={styles.passwordContainer}>
                                 <TextInput
@@ -78,20 +126,30 @@ const Login: React.FC<{ navigation: any }> = ({ navigation }) => {
                                 </TouchableOpacity>
                             </View>
                         </View>
+<<<<<<< HEAD
 
                         <TouchableOpacity style={styles.ButtonEntrar} onPress={handleSubmit}>
                             <Text style={styles.ButtonEntrarText}>Entrar</Text>
                         </TouchableOpacity>
 
+=======
+                        <TouchableOpacity style={styles.ButtonEntrar} onPress={handleSubmit}>
+                            <Text style={styles.ButtonEntrarText}>Entrar</Text>
+                        </TouchableOpacity>
+>>>>>>> origin/Front
                         <View style={styles.ContainerLinks}>
                             <View style={styles.LinkWrapper}>
                                 <TouchableOpacity style={styles.ButtonEsqueceuSenha} onPress={() => navigation.navigate('RecuperarSenha')}>
                                     <Text style={styles.ButtonEsqueceuSenhaText}>Esqueceu a senha?</Text>
                                 </TouchableOpacity>
                             </View>
+<<<<<<< HEAD
 
                             <View style={styles.Separator} />
 
+=======
+                            <View style={styles.Separator} />
+>>>>>>> origin/Front
                             <View style={styles.LinkWrapper}>
                                 <TouchableOpacity style={styles.ButtonCadastro} onPress={() => navigation.navigate('Cadastro')}>
                                     <Text style={styles.ButtonCadastroText}>Cadastre-se</Text>
@@ -104,5 +162,10 @@ const Login: React.FC<{ navigation: any }> = ({ navigation }) => {
         </KeyboardAvoidingView>
     );
 }
+<<<<<<< HEAD
 
 export default Login;
+=======
+export default Login;
+
+>>>>>>> origin/Front
