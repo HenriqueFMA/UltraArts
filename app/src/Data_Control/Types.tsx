@@ -4,5 +4,6 @@ export type RootStackParamList = {
     RecuperarSenha: undefined;
     Home: undefined;
     Profile: undefined;
+    NewPost: undefined;
   };
   

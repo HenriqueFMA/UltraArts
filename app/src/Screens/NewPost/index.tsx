@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { createPost, uploadImage } from '../../Data_Control/PostService'; // Certifique-se de importar corretamente
-import { styles } from './style'; // Ajuste o caminho conforme necessário
-import { auth, firestore } from "../FireBase/firebaseConfig"; // Ajuste o caminho conforme necessário
+import { createPost, uploadImage } from '../../Data_Control/PostService';
+import { styles } from './style'; // Caminho ajustado para o novo arquivo de estilos padronizado
+import { auth, firestore } from "../FireBase/firebaseConfig";
 import { collection, doc } from 'firebase/firestore';
+import Feather from "@expo/vector-icons/Feather";
+import { useNavigation } from '@react-navigation/native';
 
 const CreatePostScreen: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -12,8 +14,9 @@ const CreatePostScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const userId = auth.currentUser?.uid;
+  const navigation = useNavigation(); // Hook de navegação
 
-  // Função para escolher imagens da galeria
+
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -26,9 +29,7 @@ const CreatePostScreen: React.FC = () => {
     }
   };
 
-  // Função para criar o post
   const handleCreatePost = async () => {
-    // Verifica se o título e imagens foram selecionados
     if (!title || images.length === 0) {
       setError('Por favor, insira um título e selecione pelo menos uma imagem.');
       return;
@@ -46,7 +47,6 @@ const CreatePostScreen: React.FC = () => {
     try {
       const imageUrls: string[] = [];
 
-      // Faz upload das imagens e armazena as URLs
       for (const imageUri of images) {
         const url = await uploadImage(userId, imageUri);
         if (url) {
@@ -54,20 +54,16 @@ const CreatePostScreen: React.FC = () => {
         }
       }
 
-      // Gera um ID único para o post
       const postId = doc(collection(firestore, 'posts')).id;
 
-      // Dados do post
       const postData = {
         title,
         content: imageUrls,
         userId,
       };
 
-      // Cria o post com o ID gerado
       await createPost(postData, postId);
 
-      // Limpa o formulário
       setTitle('');
       setImages([]);
       alert('Post criado com sucesso!');
@@ -81,15 +77,20 @@ const CreatePostScreen: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>Título</Text>
+       <TouchableOpacity style={styles.Arrowbacksharp} onPress={() => navigation.goBack()}>
+                        <Feather name="arrow-left" size={40} color="black" />
+                    </TouchableOpacity>
+      <Text style={styles.label}>Discrição</Text>
       <TextInput
         style={styles.input}
         value={title}
         onChangeText={setTitle}
-        placeholder="Digite o título do post"
+        placeholder="Digite a discrição do post"
       />
 
-      <Button title="Selecionar Imagens" onPress={pickImage} />
+<TouchableOpacity style={styles.button} onPress={pickImage}>
+  <Text style={styles.buttonText}>Selecionar Imagens</Text>
+</TouchableOpacity>
 
       <View style={styles.imageContainer}>
         {images.map((imageUri, index) => (

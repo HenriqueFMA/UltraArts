@@ -1,27 +1,16 @@
 import React from 'react';
 import { View } from 'react-native';
+import PostComponent from '../../components/Post/index'
 import BarraNavegacao from '../../components/BarraDeNavegacao/Index';
-import PostComponent from '../../components/Post'; // Certifique-se de que o componente PostComponent existe
-import { useNavigation } from '@react-navigation/native';
-import { NavigationProp } from '@react-navigation/native';
-
-type RootStackParamList = {
-  Home: undefined;
-  Profile: undefined;
-  NewPost: undefined;
-};
-
-type HomeScreenNavigationProp = NavigationProp<RootStackParamList, 'Home'>;
 
 const Home: React.FC = () => {
-  const navigation = useNavigation<HomeScreenNavigationProp>();
+  // Supondo que o postId seja fornecido de alguma forma (exemplo: de banco de dados ou navegação)
+  const postId = "8I2LiDSur1C6UmFRHv7m";
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Exemplo de como passar o Id do post */}
-      <PostComponent Id="8I2LiDSur1C6UmFRHv7m" />
+      <PostComponent postId={postId} />
 
-      {/* Barra de Navegação */}
       <BarraNavegacao />
     </View>
   );

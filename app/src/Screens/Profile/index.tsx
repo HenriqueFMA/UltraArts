@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, TouchableOpacity, Pressable } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -11,6 +11,7 @@ import { auth } from "../FireBase/firebaseConfig";
 import { useNavigation } from '@react-navigation/native';
 import { getUserProfile } from '../../Data_Control/userServise';
 import { useNetInfo } from '@react-native-community/netinfo';
+
 
 interface UserData {
   username: string;
@@ -28,9 +29,18 @@ const Profile: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
 
   const handleLogout = async () => {
     await signOut(auth);
+  };
+
+  const toggleMenu = () => {
+    setIsMenuVisible(!isMenuVisible);
+  };
+
+  const hideMenu = () => {
+    if (isMenuVisible) setIsMenuVisible(false);
   };
 
   useEffect(() => {
@@ -55,14 +65,6 @@ const Profile: React.FC = () => {
 
     fetchUserData();
   }, []);
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text>Carregando...</Text>
-      </View>
-    );
-  }
 
   if (error) {
     return (
@@ -89,15 +91,47 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <Pressable onPress={hideMenu} style={styles.container}>
       <View style={styles.cabecario}>
         <View style={styles.icons}>
           <MaterialCommunityIcons name="message" size={24} color="white" style={{ marginRight: 15 }} />
           <AntDesign name="heart" size={24} color="white" style={{ marginRight: 10 }} />
-          <Entypo name="dots-three-vertical" size={24} color="white" />
+          <TouchableOpacity onPress={(e) => { e.stopPropagation(); toggleMenu(); }}>
+            <Entypo name="dots-three-vertical" size={24} color="white" />
+          </TouchableOpacity>
         </View>
       </View>
+
+      {isMenuVisible && (
+        <View style={styles.menuContainer}>
+          <TouchableOpacity onPress={() => { /* ação para Minha loja */ }}>
+            <Text style={styles.menuItem}>Minha loja</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { /* ação para Compartilhar perfil */ }}>
+            <Text style={styles.menuItem}>Compartilhar perfil</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { /* ação para Salvos */ }}>
+            <Text style={styles.menuItem}>Salvos</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { /* ação para Configurações */ }}>
+            <Text style={styles.menuItem}>Configurações</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { () => navigation.navigate('NewPost') }}>
+            <Text style={styles.menuItem}>Novo post</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { /* ação para Gerenciar perfil */ }}>
+            <Text style={styles.menuItem}>Gerenciar perfil</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleLogout}>
+            <Text style={styles.menuItem}>Sair</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <View style={styles.conteudo}>
+        <View>
+          
+        </View>
         <View style={styles.nomeUsuario}>
           <Text style={styles.textUsuario}>{userData.username}</Text>
         </View>
@@ -115,7 +149,7 @@ const Profile: React.FC = () => {
           <Text style={styles.seguidoresTexto}>{userData.followers} Seguidores</Text>
           <Text style={styles.seguidoresTexto}>{userData.following} Seguindo</Text>
         </View>
-        <TouchableOpacity style={styles.botaoPerfil} onPress={handleLogout}>
+        <TouchableOpacity style={styles.botaoPerfil} onPress={() => navigation.navigate('updateProfile')}>
           <Text style={styles.textoBotao}>Editar perfil</Text>
         </TouchableOpacity>
         <View style={styles.icons2}>
@@ -123,12 +157,12 @@ const Profile: React.FC = () => {
           <MaterialCommunityIcons name="cart-variant" size={24} color="black" />
           <FontAwesome6 name="bookmark" size={24} color="black" />
         </View>
-      <TouchableOpacity style={styles.navigationButton} onPress={() => navigation.navigate('NewPost')}>
-  <Text style={styles.navigationButtonText}>Settings</Text>
-</TouchableOpacity>
       </View>
+      <TouchableOpacity style={styles.navigationButton} onPress={() => navigation.navigate('NewPost')}>
+        <AntDesign name="plus" size={24} color="black" />
+      </TouchableOpacity>
       <BarraNavegacao />
-    </View>
+    </Pressable>
   );
 };
 
