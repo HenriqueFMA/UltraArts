@@ -2,6 +2,12 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+<<<<<<< HEAD
+    "esModuleInterop": true,  // Habilita a compatibilidade com importações padrão de módulos CommonJS
+    "allowSyntheticDefaultImports": true, // Facilita importações default para módulos CommonJS
+    "skipLibCheck": true,  // Ignora checagens de tipos em arquivos de bibliotecas
+=======
+>>>>>>> origin/Front
     "paths": {
       "@/*": [
         "./*"
@@ -18,4 +24,7 @@
     "expo-env.d.ts"
   ]
 }
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/Front

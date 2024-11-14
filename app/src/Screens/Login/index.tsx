@@ -1,30 +1,43 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Image } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Image } from "react-native";
 import { styles } from './styles';
+import React, { useState } from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { loginUser } from '../../Data_Control/Login'; // Importe a função loginUser
+import { auth } from "../FireBase/firebaseConfig";
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login: React.FC<{ navigation: any }> = ({ navigation }) => {
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [email, setEmail] = useState('');  
+    const [senha, setSenha] = useState('');  
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);  
+    const [errorMessage, setErrorMessage] = useState<string | null | undefined>(undefined); 
     const [loginFailed, setLoginFailed] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
 
+    // Função para alternar a visibilidade da senha
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible);
     };
 
+    // Função para tratar o login
     const handleSubmit = async () => {
-        const result = await loginUser(email, senha);
-        if (result.success) {
-            setLoginFailed(false);
-            navigation.navigate('Home'); // Redirecione para a tela principal ou desejada
+        if (email && senha) {
+            try {
+                const result = await loginUser(email, senha);
+                if (result.success) {
+                    setLoginFailed(false);
+                    navigation.navigate('Home'); // Redireciona para a tela principal
+                } else {
+                    setLoginFailed(true);
+                    setErrorMessage(result.message || 'Erro ao tentar realizar o login.');
+                }
+            } catch (erro) {
+                console.log("Erro ao fazer login:", erro);
+                setErrorMessage("Erro ao tentar realizar o login. Tente novamente.");
+            }
         } else {
-            setLoginFailed(true);
-            setErrorMessage(result.message || '');
+            setErrorMessage("Por favor, preencha todos os campos.");  // Caso o email ou senha estejam vazios
         }
-    };
+    }
 
     return (
         <KeyboardAvoidingView
@@ -41,6 +54,10 @@ const Login: React.FC<{ navigation: any }> = ({ navigation }) => {
                         <View style={styles.CardLogin}>
                             <Text style={styles.TextH1}>Bora entrar?</Text>
                             <Text>Faça login para iniciar</Text>
+
+                            {/* Exibe a mensagem de erro se houver */}
+                            {errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
+
                             <Text style={styles.Text}>Email:</Text>
                             <TextInput
                                 style={[styles.inputEmail, loginFailed && { borderColor: 'red' }]}
@@ -71,16 +88,20 @@ const Login: React.FC<{ navigation: any }> = ({ navigation }) => {
                             </View>
                             {loginFailed && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
                         </View>
+
                         <TouchableOpacity style={styles.ButtonEntrar} onPress={handleSubmit}>
                             <Text style={styles.ButtonEntrarText}>Entrar</Text>
                         </TouchableOpacity>
+
                         <View style={styles.ContainerLinks}>
                             <View style={styles.LinkWrapper}>
                                 <TouchableOpacity style={styles.ButtonEsqueceuSenha} onPress={() => navigation.navigate('RecuperarSenha')}>
                                     <Text style={styles.ButtonEsqueceuSenhaText}>Esqueceu a senha?</Text>
                                 </TouchableOpacity>
                             </View>
+
                             <View style={styles.Separator} />
+
                             <View style={styles.LinkWrapper}>
                                 <TouchableOpacity style={styles.ButtonCadastro} onPress={() => navigation.navigate('Cadastro')}>
                                     <Text style={styles.ButtonCadastroText}>Cadastre-se</Text>

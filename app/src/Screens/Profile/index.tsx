@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Image, TouchableOpacity, Pressable } from "react-native";
+import { styles } from "./style";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { styles } from "./style";
-import BarraNavegacao from '../../components/BarraDeNavegacao/Index';
 import { signOut } from "firebase/auth";
 import { auth } from "../FireBase/firebaseConfig";
-import { useNavigation } from '@react-navigation/native';
-import { getUserProfile } from '../../Data_Control/userServise';
-import { useNetInfo } from '@react-native-community/netinfo';
-
+import { useNavigation } from "@react-navigation/native";
+import { getUserProfile } from "../../Data_Control/userServise";
+import { useNetInfo } from "@react-native-community/netinfo";
+import BarraNavegacao from '../../components/BarraDeNavegacao/Index';
 
 interface UserData {
   username: string;
@@ -27,21 +26,16 @@ const Profile: React.FC = () => {
   const netInfo = useNetInfo();
 
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
 
   const handleLogout = async () => {
     await signOut(auth);
+    navigation.navigate('Login'); // Redireciona para a tela de Login
   };
 
-  const toggleMenu = () => {
-    setIsMenuVisible(!isMenuVisible);
-  };
-
-  const hideMenu = () => {
-    if (isMenuVisible) setIsMenuVisible(false);
-  };
+  const toggleMenu = () => setIsMenuVisible(!isMenuVisible);
+  const hideMenu = () => isMenuVisible && setIsMenuVisible(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -49,45 +43,23 @@ const Profile: React.FC = () => {
       if (userId) {
         try {
           const fetchedUserData = await getUserProfile(userId);
-          if (fetchedUserData) {
-            setUserData(fetchedUserData);
-          } else {
-            setError('Não foi possível encontrar os dados do usuário.');
-          }
+          setUserData(fetchedUserData || null);
         } catch (error) {
-          setError('Erro ao carregar os dados do usuário.');
+          setError("Erro ao carregar os dados do usuário.");
         }
       } else {
-        setError('Usuário não autenticado.');
+        setError("Usuário não autenticado.");
       }
-      setLoading(false);
     };
-
     fetchUserData();
   }, []);
 
   if (error) {
-    return (
-      <View style={styles.container}>
-        <Text>{error}</Text>
-      </View>
-    );
-  }
-
-  if (!userData) {
-    return (
-      <View style={styles.container}>
-        <Text>Não foi possível encontrar o perfil do usuário.</Text>
-      </View>
-    );
+    return <View style={styles.container}><Text>{error}</Text></View>;
   }
 
   if (!netInfo.isConnected) {
-    return (
-      <View style={styles.container}>
-        <Text>Sem conexão com a internet. Tente novamente mais tarde.</Text>
-      </View>
-    );
+    return <View style={styles.container}><Text>Sem conexão com a internet. Tente novamente mais tarde.</Text></View>;
   }
 
   return (
@@ -104,23 +76,8 @@ const Profile: React.FC = () => {
 
       {isMenuVisible && (
         <View style={styles.menuContainer}>
-          <TouchableOpacity onPress={() => { /* ação para Minha loja */ }}>
-            <Text style={styles.menuItem}>Minha loja</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => { /* ação para Compartilhar perfil */ }}>
-            <Text style={styles.menuItem}>Compartilhar perfil</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => { /* ação para Salvos */ }}>
-            <Text style={styles.menuItem}>Salvos</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => { /* ação para Configurações */ }}>
-            <Text style={styles.menuItem}>Configurações</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => { () => navigation.navigate('NewPost') }}>
+          <TouchableOpacity onPress={() => navigation.navigate('NewPost')}>
             <Text style={styles.menuItem}>Novo post</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => { /* ação para Gerenciar perfil */ }}>
-            <Text style={styles.menuItem}>Gerenciar perfil</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleLogout}>
             <Text style={styles.menuItem}>Sair</Text>
@@ -129,25 +86,18 @@ const Profile: React.FC = () => {
       )}
 
       <View style={styles.conteudo}>
-        <View>
-          
-        </View>
         <View style={styles.nomeUsuario}>
-          <Text style={styles.textUsuario}>{userData.username}</Text>
+          <Text style={styles.textUsuario}>{userData?.username || "Usuário"}</Text>
         </View>
         <Image
-          source={
-            userData.profilePicture
-              ? { uri: userData.profilePicture }
-              : require("../images/profilepic.png")
-          }
+          source={userData?.profilePicture ? { uri: userData.profilePicture } : require("../images/profilepic.png")}
           style={styles.imagemPerfil}
         />
         <Text style={{ fontWeight: 'bold' }}>Descrição</Text>
-        <Text>{userData.description || "Informações não disponíveis"}</Text>
+        <Text>{userData?.description || "Informações não disponíveis"}</Text>
         <View style={styles.segTexto}>
-          <Text style={styles.seguidoresTexto}>{userData.followers} Seguidores</Text>
-          <Text style={styles.seguidoresTexto}>{userData.following} Seguindo</Text>
+          <Text style={styles.seguidoresTexto}>{userData?.followers} Seguidores</Text>
+          <Text style={styles.seguidoresTexto}>{userData?.following} Seguindo</Text>
         </View>
         <TouchableOpacity style={styles.botaoPerfil} onPress={() => navigation.navigate('updateProfile')}>
           <Text style={styles.textoBotao}>Editar perfil</Text>
@@ -158,9 +108,11 @@ const Profile: React.FC = () => {
           <FontAwesome6 name="bookmark" size={24} color="black" />
         </View>
       </View>
+
       <TouchableOpacity style={styles.navigationButton} onPress={() => navigation.navigate('NewPost')}>
         <AntDesign name="plus" size={24} color="black" />
       </TouchableOpacity>
+
       <BarraNavegacao />
     </Pressable>
   );
