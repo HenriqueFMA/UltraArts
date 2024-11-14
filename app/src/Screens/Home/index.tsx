@@ -1,6 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
+<<<<<<< HEAD
 import PostComponent from '../../components/Post/index'
+=======
+import PostComponent from '../../components/PostComponent/PostComponent'
+>>>>>>> b70a45ad20bf8eda07b8218d1149660aac4ab61d
 import BarraNavegacao from '../../components/BarraDeNavegacao/Index';
 
 const Home: React.FC = () => {
@@ -16,4 +20,10 @@ const Home: React.FC = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Home;
+=======
+export default Home;
+
+
+>>>>>>> b70a45ad20bf8eda07b8218d1149660aac4ab61d

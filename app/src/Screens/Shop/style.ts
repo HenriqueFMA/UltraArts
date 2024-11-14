@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> b70a45ad20bf8eda07b8218d1149660aac4ab61d
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({

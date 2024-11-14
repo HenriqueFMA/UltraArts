@@ -10,6 +10,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 type RootStackParamList = {
   Home: undefined;
   Details: { id: number };
+  Shop: undefined;
   Profile: undefined;
   Shop: undefined;
   Location: undefined;
@@ -38,7 +39,11 @@ const BarraNavegacao: React.FC = () => {
       <AntDesign name="search1" size={24} color="black" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Shop')}>
+<<<<<<< HEAD
         <AntDesign name="shoppingcart" size={24} color={getColor('Shop')} />
+=======
+        <AntDesign name="shoppingcart" size={24} color={getColor('Cart')} />
+>>>>>>> b70a45ad20bf8eda07b8218d1149660aac4ab61d
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile')}>
         <FontAwesome5 name="user-alt" size={24} color={getColor('Profile')} />

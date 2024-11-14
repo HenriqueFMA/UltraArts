@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#297ac9",
   },
   cabecario: {
-    height: 90,
+    height: 75,
     backgroundColor: "#297ac9",
     justifyContent: "center",
     alignItems: "center",
@@ -35,7 +35,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     paddingRight: 10,
-    marginTop: "5%",
   },
   nomeUsuario: {
     alignItems: "center", // Centraliza o conteúdo dentro da view

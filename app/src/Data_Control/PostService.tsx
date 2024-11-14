@@ -145,23 +145,3 @@ export const getPost = async (postId: string): Promise<PostData | null> => {
     throw new Error('Erro ao carregar os dados do post.');
   }
 };
-
-export const getPostsFromPost = async (): Promise<PostData[] | null> => {
-  console.log("Iniciando busca de todos os posts.");
-  
-  try {
-    const querySnapshot = await getDocs(collection(firestore, "Posts"));
-    const posts: PostData[] = [];
-    
-    querySnapshot.forEach((doc) => {
-      const data = doc.data() as Omit<PostData, 'id'>;
-      posts.push({ id: doc.id, ...data });
-    });
-    
-    console.log("Posts obtidos com sucesso:", posts);
-    return posts;
-  } catch (error) {
-    console.error("Erro ao buscar posts:", error);
-    return null;
-  }
-};
