@@ -1,64 +1,46 @@
-<<<<<<< HEAD
-import React from 'react'; 
-=======
->>>>>>> origin/Front
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { useColorScheme } from 'react-native';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
 import 'react-native-reanimated';
-import Login from './src/Screens/Login';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import Cadastro from './src/Screens/Cadasto';
-import RecuperarSenha from './src/Screens/RecuperacaoDeSenha';
-import { auth } from './src/Screens/FireBase/firebaseConfig'; 
-import useAuth from './src/Hooks/useAuth';
+
 import Home from './src/Screens/Home';
-<<<<<<< HEAD
-import Profile from './src/Screens/Profile'
-=======
+import Shop from './src/Screens/Shop';
+import Profile from './src/Screens/Profile';
+import NewPost from './src/Screens/NewPost';
+import Login from './src/Screens/Login';
+import Cadastro from './src/Screens/Cadastro';
+import RecuperarSenha from './src/Screens/RecuperacaoDeSenha';
+import updateProfile from './src/Screens/UpdateProfile';
+import useAuth from './src/Hooks/useAuth';
 
->>>>>>> origin/Front
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+const Stack = createStackNavigator();
+
+// Prevenir que a splash screen esconda antes de carregar os assets
 SplashScreen.preventAutoHideAsync();
-const Stack = createNativeStackNavigator();
 
-export default function RootLayout() {
+export default function App() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  // Verificar se as fontes foram carregadas antes de esconder a SplashScreen
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  // Carregar o estado de autenticação do usuário
-  const { user } = useAuth();
-
-  if (!loaded) {
-    return null; // Retornar nulo até que as fontes sejam carregadas
-  }
+  const { user } = useAuth(); // Substitua pela lógica real de autenticação
 
   return (
     <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme} independent={true}>
       <Stack.Navigator>
         {user ? (
-          <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+          <>
+            <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+            <Stack.Screen options={{ headerShown: false }} name="Shop" component={Shop} />
+            <Stack.Screen options={{ headerShown: false }} name="Profile" component={Profile} />
+            <Stack.Screen options={{ headerShown: false }} name="NewPost" component={NewPost} />
+            <Stack.Screen options={{ headerShown: false }} name="updateProfile" component={updateProfile} />
+          </>
         ) : (
           <>
             <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
             <Stack.Screen options={{ headerShown: false }} name="Cadastro" component={Cadastro} />
             <Stack.Screen options={{ headerShown: false }} name="RecuperarSenha" component={RecuperarSenha} />
-<<<<<<< HEAD
-            <Stack.Screen options={{ headerShown: false }} name="Profile" component={Profile} />
-=======
->>>>>>> origin/Front
           </>
         )}
       </Stack.Navigator>

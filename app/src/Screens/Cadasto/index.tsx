@@ -124,18 +124,27 @@ import React, { useState } from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Feather from '@expo/vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
+import { registerUser } from '../../Data_Control/Register';
 
-function Realizar_cadastro() {
-    // Fazer a função e adicionar caminho para tela de Login caso a o cadastro  seja bem sucedido
-}
 const Cadastro: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [nomeCompleto, setNomeCompleto] = useState<string>('');
     const [usuario, setUsuario] = useState<string>('');
     const [dataNascimento, setDataNascimento] = useState<string>('');
     const [senha, setSenha] = useState<string>('');
-
+    
     const navigation = useNavigation(); // Hook de navegação
+    
+    const handleRegister = async () => {
+        const response = await registerUser({ email, nomeCompleto, usuario, dataNascimento, senha });
+        
+        if (response.success) {
+            alert(response.message);
+            navigation.goBack(); // Redireciona o usuário de volta após registro
+        } else {
+            alert(response.message); // Mostra mensagem de erro
+        }
+    }
 
     return (
         <KeyboardAvoidingView style={styles.Main}
@@ -205,7 +214,7 @@ const Cadastro: React.FC = () => {
                                     onChangeText={setSenha}
                                 />
                             </View>
-                            <TouchableOpacity style={styles.ButtonCadastro} onPress={Realizar_cadastro}  >
+                            <TouchableOpacity style={styles.ButtonCadastro} onPress={handleRegister} >
                                 <Text style={styles.ButtonCadastroText}>
                                     CADASTRAR
                                 </Text>

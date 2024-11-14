@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "613106689377",
+    "project_id": "database-ultraarts",
+    "storage_bucket": "database-ultraarts.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613106689377:android:a2515ff5e9152bc38e1120",
+        "android_client_info": {
+          "package_name": "com.henrique1411.UltraArtes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "613106689377-vki4f52dq7t1r877d6icv34pqrs4k2ur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-rPjih9Z0UhJLZMiL00uPwWIONz_IjQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "613106689377-vki4f52dq7t1r877d6icv34pqrs4k2ur.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

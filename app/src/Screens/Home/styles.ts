@@ -1,22 +1,30 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
-export const styles=StyleSheet.create({
-    ButtonEntrar: {
-        backgroundColor: '#103560',
-        marginTop: 100,
-        marginLeft: 50,
-
-        width: 150,
-        height: 35,
-        borderRadius: 90,
-
-
-
-
-    },
-    main: {
-        backgroundColor: '#297ac9',
-        flex: 1,
-    },
-
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 8,
+  },
+  date: {
+    fontSize: 14,
+    color: '#666',
+  },
+  likes: {
+    fontSize: 16,
+    marginTop: 8,
+  },
 });
+
+export default styles;

@@ -1,26 +1,29 @@
-import { Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Image} from "react-native";
-import { styles } from './styles';
-import React, { useState } from 'react';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { signOut } from "firebase/auth";
-import { auth } from "../FireBase/firebaseConfig";
-import Post from '../../components/Post';
+import React from 'react';
+import { View } from 'react-native';
+<<<<<<< HEAD
+import PostComponent from '../../components/Post/index'
+=======
+import PostComponent from '../../components/PostComponent/PostComponent'
+>>>>>>> b70a45ad20bf8eda07b8218d1149660aac4ab61d
+import BarraNavegacao from '../../components/BarraDeNavegacao/Index';
 
+const Home: React.FC = () => {
+  // Supondo que o postId seja fornecido de alguma forma (exemplo: de banco de dados ou navegação)
+  const postId = "8I2LiDSur1C6UmFRHv7m";
 
+  return (
+    <View style={{ flex: 1 }}>
+      <PostComponent postId={postId} />
 
-const Home: React.FC<{ navigation: any }> = ({ navigation }) => {
-const handleLogout = async ()=>{
-    await signOut(auth);
-}
-const postId = '12345';
-    return (
-       <View style={styles.main} >
-            <TouchableOpacity style={styles.ButtonEntrar} onPress={handleLogout}>
-                <Text>sair</Text>
-            </TouchableOpacity>
-            <Post navigation={navigation} postId={postId} />
-       </View>
-    );
-}
+      <BarraNavegacao />
+    </View>
+  );
+};
+
+<<<<<<< HEAD
+export default Home;
+=======
 export default Home;
 
+
+>>>>>>> b70a45ad20bf8eda07b8218d1149660aac4ab61d
