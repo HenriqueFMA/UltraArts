@@ -12,7 +12,6 @@ type RootStackParamList = {
   Details: { id: number };
   Shop: undefined;
   Profile: undefined;
-  Cart: undefined;
   Location: undefined;
 };
 
@@ -39,7 +38,7 @@ const BarraNavegacao: React.FC = () => {
       <AntDesign name="search1" size={24} color="black" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Shop')}>
-        <AntDesign name="shoppingcart" size={24} color={getColor('Cart')} />
+        <AntDesign name="shoppingcart" size={24} color={getColor('Shop')} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile')}>
         <FontAwesome5 name="user-alt" size={24} color={getColor('Profile')} />

@@ -1,55 +1,65 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
-  postContainer: {
-    backgroundColor: '#fff',
+// Definindo cores reutilizáveis
+const colors = {
+  primaryText: '#333',
+  secondaryText: '#888',
+  background: '#fff',
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: colors.background,
     marginBottom: 20,
-    padding: 10,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
   },
-  postHeader: {
+  userInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   profileImage: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 10,
+    marginRight: 12,
+  },
+  noProfileImageText: {
+    fontSize: 16,
+    color: colors.secondaryText,
+    fontStyle: 'italic',
   },
   username: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: colors.primaryText,
+    lineHeight: 24, // Melhora a legibilidade
   },
-  imageCarousel: {
-    width: '100%',
-    height: 300,
-    marginVertical: 10,
-  },
-  postImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  postDetails: {
-    marginTop: 10,
-  },
-  postTitle: {
-    fontSize: 16,
+  title: {
+    fontSize: 24,
     fontWeight: 'bold',
+    color: colors.primaryText,
+    marginBottom: 12,
+    lineHeight: 32, // Melhor espaçamento entre linhas
   },
-  postDate: {
-    color: '#888',
-    fontSize: 12,
-    marginTop: 4,
+  image: {
+    width: '100%',
+    height: 250,
+    resizeMode: 'cover',
+    borderRadius: 8,
+    marginBottom: 12,
   },
-  actionButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 10,
+  date: {
+    fontSize: 14,
+    color: colors.secondaryText,
+    marginBottom: 8,
+    lineHeight: 20, // Aumenta o espaçamento entre linhas para melhor legibilidade
+  },
+  likes: {
+    fontSize: 16,
+    color: colors.primaryText,
   },
 });
+
+export default styles;

@@ -1,34 +1,67 @@
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+// Definindo cores reutilizáveis
+const colors = {
+  primaryText: '#333',
+  secondaryText: '#888',
+  background: '#fff',
+};
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 10,
     backgroundColor: '#fff',
-    marginBottom: 20,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 12,
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
   },
-  image: {
-    width: '100%',
-    height: 250,
-    resizeMode: 'cover',
-    borderRadius: 8,
-    marginBottom: 12,
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    marginRight: 10,
   },
-  date: {
+  noProfileImageText: {
     fontSize: 14,
     color: '#888',
-    marginBottom: 8,
+  },
+  username: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  carousel: {
+    marginVertical: 10,
+  },
+  carouselImage: {
+    width: 400,
+    height: 400,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  date: {
+    fontSize: 12,
+    color: '#888',
+    marginVertical: 1,
+  },
+  title: {
+    fontSize: 14,
+    marginVertical: 1,
+    fontWeight:500,
   },
   likes: {
-    fontSize: 16,
-    color: '#333',
+    fontSize: 14,
+    color: '#555',
+    marginVertical: 60,
+  },
+  containerInfoPost: {
+    marginVertical: 10,
+  },
+  containerBio: {
+    flexDirection: 'row', // Coloca os elementos lado a lado
+    alignItems: 'center', // Alinha verticalmente
+    marginVertical: 10,
+    gap: 10,  
   },
 });
-
-export default styles;

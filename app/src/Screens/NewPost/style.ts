@@ -1,45 +1,68 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    top: 19,
     backgroundColor: '#fff',
-  },
-  label: {
-    fontSize: 18,
-    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    padding: 16,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 5,
-  },
-  imageContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 20,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    marginRight: 10,
-    marginBottom: 10,
+    paddingLeft: 10,
+    backgroundColor: '#bfbfbf',
+    borderRadius: 100,
+    width: 380,
+    height: 35,
+    color: '#000',
+    padding: 6,
+    fontSize: 16,
+    textAlignVertical: 'center',
+    marginTop: 10,
   },
   button: {
     backgroundColor: '#007BFF',
-    padding: 15,
-    borderRadius: 5,
+    padding: 10,
+    borderRadius: 20,
     alignItems: 'center',
+    width: '80%',
+    marginTop: 20,
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
   },
+  label: {
+    marginTop: 20,
+    fontSize: 18,
+    marginLeft: 10,
+    alignSelf: 'flex-start',
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    margin: 5,
+  },
   errorText: {
     color: 'red',
-    marginBottom: 20,
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  Arrowbacksharp: {
+    marginTop: 0,
+    alignSelf: 'flex-start',
   },
 });
+
+export default styles;

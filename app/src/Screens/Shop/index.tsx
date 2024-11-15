@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { View, Text, Image, ScrollView, TextInput } from 'react-native';
 import BarraNavegacao from '../../components/BarraDeNavegacao/Index'; 
@@ -53,5 +54,3 @@ export default function ArtGalleryScreen() {
     </View>
   );
 }
-
-

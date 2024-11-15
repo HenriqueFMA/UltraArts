@@ -21,7 +21,8 @@ export const getPost = async (postId: string): Promise<PostData | null> => {
       const postData = postDoc.data();
       return {
         content: postData?.content || [],
-        createdAt: postData?.createdAt?.toDate?.() || new Date(),
+        createdAt: postData?.createdAt?.toDate ? postData?.createdAt?.toDate() : new Date(), // Verifica se é um Timestamp
+
         likes: postData?.likes || 0,
         postId: postData?.postId || '',
         title: postData?.title || 'Sem título',
@@ -36,3 +37,4 @@ export const getPost = async (postId: string): Promise<PostData | null> => {
     throw new Error('Erro ao carregar os dados do post.');
   }
 };
+
