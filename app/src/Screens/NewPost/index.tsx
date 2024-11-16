@@ -77,9 +77,9 @@ const CreatePostScreen: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-       <TouchableOpacity style={styles.Arrowbacksharp} onPress={() => navigation.goBack()}>
-                        <Feather name="arrow-left" size={40} color="black" />
-                    </TouchableOpacity>
+      <TouchableOpacity style={styles.Arrowbacksharp} onPress={() => navigation.goBack()}>
+        <Feather name="arrow-left" size={40} color="black" />
+      </TouchableOpacity>
       <Text style={styles.label}>Discrição</Text>
       <TextInput
         style={styles.input}
@@ -88,9 +88,9 @@ const CreatePostScreen: React.FC = () => {
         placeholder="Digite a discrição do post"
       />
 
-<TouchableOpacity style={styles.button} onPress={pickImage}>
-  <Text style={styles.buttonText}>Selecionar Imagens</Text>
-</TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={pickImage}>
+        <Text style={styles.buttonText}>Selecionar Imagens</Text>
+      </TouchableOpacity>
 
       <View style={styles.imageContainer}>
         {images.map((imageUri, index) => (

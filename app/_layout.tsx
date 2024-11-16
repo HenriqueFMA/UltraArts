@@ -11,6 +11,9 @@ import RecuperarSenha from './src/Screens/RecuperacaoDeSenha';
 import useAuth from './src/Hooks/useAuth';
 import firebase from 'firebase/app';
 import React from 'react';
+import  UpdateProfile  from './src/Screens/UpdateProfile';
+import SearchUserProfileScreen from './src/Screens/sharef';
+import PostProfile from './src/Screens/PostProfile';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +30,10 @@ export default function App() {
             <Stack.Screen options={{ headerShown: false }} name="Shop" component={Shop} />
             <Stack.Screen options={{ headerShown: false }} name="Profile" component={Profile} />
             <Stack.Screen options={{ headerShown: false }} name="NewPost" component={NewPost} />
+            <Stack.Screen options={{ headerShown: false }} name="UpdateProfile" component={UpdateProfile} />
+            <Stack.Screen options={{ headerShown: false }} name="SearchUserProfileScreen" component={SearchUserProfileScreen} />
+            <Stack.Screen options={{ headerShown: false }} name="PostProfile" component={PostProfile} />
+
 
           </>
         ) : (

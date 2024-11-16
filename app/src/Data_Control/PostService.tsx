@@ -1,5 +1,5 @@
 import { firestore, storage, auth } from "../Screens/FireBase/firebaseConfig";
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc ,query, where} from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Definindo a interface para os dados do post
@@ -145,3 +145,47 @@ export const getPost = async (postId: string): Promise<PostData | null> => {
     throw new Error('Erro ao carregar os dados do post.');
   }
 };
+export const fetchUserPosts = async (userId: string) => {
+  try {
+    const querySnapshot = await getDocs(collection(firestore, "Posts"));
+    const userPosts = querySnapshot.docs
+      .map((doc) => {
+        const data = doc.data();
+        return data.userId === userId ? { id: doc.id, ...data } : null;
+      })
+      .filter((post) => post !== null);
+
+    return userPosts;
+  } catch (error) {
+    console.error("Erro ao buscar posts do usuário:", error);
+    return [];
+  }
+};
+
+export const fetchUserPostsList = async (userId: string) => {
+  try {
+    const querySnapshot = await getDocs(collection(firestore, "Posts"));
+    const userPosts = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      
+      // Verifica se a data do timestamp existe e converte para Data
+      const timestamp = data.timestamp ? data.timestamp.toDate() : new Date();  // Se não houver, usamos a data atual como fallback
+      
+      // Filtra os posts do usuário com o `userId` correspondente
+      return data.userId === userId ? {
+        id: doc.id,  // ID do post
+        content: data.content || [],  // Conteúdo do post, garantindo que seja um array
+        timestamp: timestamp,  // Converte timestamp para Data
+        title: data.title || 'Sem título',  // Adiciona título (com fallback)
+        likes: data.likes || 0  // Fallback para o número de likes
+      } : null;
+    }).filter((post) => post !== null);  // Filtra posts nulos
+
+    console.log('Posts encontrados:', userPosts); // Verificando os posts encontrados
+    return userPosts;  // Retorna a lista de posts do usuário
+  } catch (error) {
+    console.error('Erro ao buscar posts do usuário:', error);
+    return [];  // Retorna uma lista vazia em caso de erro
+  }
+};
+

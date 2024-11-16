@@ -51,9 +51,9 @@ export const styles = StyleSheet.create({
     fontWeight:500,
   },
   likes: {
-    fontSize: 14,
+    fontSize: 18,
     color: '#555',
-    marginVertical: 60,
+    fontWeight: 'bold',
   },
   containerInfoPost: {
     marginVertical: 10,
@@ -64,4 +64,9 @@ export const styles = StyleSheet.create({
     marginVertical: 10,
     gap: 10,  
   },
+  containerButton:{
+    flexDirection: 'row', // Coloca os elementos lado a lado
+    alignItems: 'center', // Alinha verticalmente
+
+  }
 });

@@ -125,6 +125,29 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
+  postsContainer: {
+    marginTop: 20,
+    paddingHorizontal: 5,
+    width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  postsGrid: {
+    width: '33%', // Garante que cada item no grid ocupe um terço da tela
+    padding: 5,
+  },
+  postImage: {
+    width: '100%', // Usa a largura completa do contêiner pai (postsGrid)
+    aspectRatio: 1, // Mantém a proporção 1:1 (quadrado)
+    borderRadius: 5,
+  },
   
+    noPostsText: {
+      textAlign: 'center',
+      fontSize: 16,
+      color: 'gray',
+    },
   
+ 
 });

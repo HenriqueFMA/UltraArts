@@ -13,6 +13,7 @@ export const styles=StyleSheet.create({
         width:'100%' ,
         justifyContent:'space-around'
         
+        
     },
     button: {
         padding: 25, // Aumenta a área clicável

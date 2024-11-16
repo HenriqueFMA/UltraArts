@@ -140,3 +140,31 @@ export const uploadProfileImage = async (userId: string, profileImageUri: string
     throw new Error("Failed to upload profile image.");
   }
 };
+export const searchUserProfileByUsername = async (username: string) => {
+  try {
+    console.log(`Buscando perfil com Username: ${username}`);
+    
+    // Consulta ao Firestore para encontrar o usuário pelo Username
+    const userRef = query(collection(firestore, 'Users'), where('Username', '==', username));
+    const userDocs = await getDocs(userRef);
+
+    // Verifica se encontrou algum documento
+    if (!userDocs.empty) {
+      const userData = userDocs.docs[0].data();
+      return {
+        username: userData.Username || '',
+        profilePicture: userData.IMG_Profile || '',
+        followers: userData.Followers || 0,
+        following: userData.Following || 0,
+        description: userData.Bio || '',
+        fullName: userData.Nome_Completo || ''
+      };
+    } else {
+      console.log("Perfil com o Username especificado não foi encontrado.");
+      return null;
+    }
+  } catch (error) {
+    console.error('Erro ao buscar perfil pelo Username:', error);
+    throw new Error('Erro ao buscar o perfil do usuário.');
+  }
+};

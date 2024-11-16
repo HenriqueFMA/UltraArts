@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 
 
 
-const UserProfile = () => {
+const UpdateProfile = () => {
   const navigation = useNavigation(); // Hook de navegação
 
   const userId = auth.currentUser?.uid;
@@ -126,4 +126,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default UpdateProfile;
