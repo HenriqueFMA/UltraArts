@@ -7,6 +7,7 @@ import Profile from './src/Screens//Profile';
 import NewPost from './src/Screens/NewPost';
 import Login from './src/Screens/Login';
 import Cadastro from './src/Screens/Cadasto';
+import Location from './src/Screens/Location';
 import RecuperarSenha from './src/Screens/RecuperacaoDeSenha';
 import useAuth from './src/Hooks/useAuth';
 import firebase from 'firebase/app';
@@ -33,8 +34,7 @@ export default function App() {
             <Stack.Screen options={{ headerShown: false }} name="UpdateProfile" component={UpdateProfile} />
             <Stack.Screen options={{ headerShown: false }} name="SearchUserProfileScreen" component={SearchUserProfileScreen} />
             <Stack.Screen options={{ headerShown: false }} name="PostProfile" component={PostProfile} />
-
-
+            <Stack.Screen options={{ headerShown: false }} name="Location" component={Location} />
           </>
         ) : (
           <>
