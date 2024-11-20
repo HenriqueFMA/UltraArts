@@ -7,6 +7,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { toggleLike, getLikesCount, isUserLiked } from '../../Data_Control/Like';
 import { auth } from '../../Screens/FireBase/firebaseConfig';
 import { addComment, getComments } from '../../Data_Control/Comments/Comments';
+import { ScrollView } from 'react-native-gesture-handler';
 interface PostComponentProps {
   postId: string;
 }
@@ -174,7 +175,9 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
       </View>
       {/* Campo de comentário */}
       {isCommentVisible && (
-        <><View style={styles.commentInputContainer}>
+        <View>
+          <ScrollView>
+          <View style={styles.commentInputContainer}>
           <TextInput
             style={styles.commentInput}
             placeholder="Adicione um comentário..."
@@ -185,7 +188,9 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
             data={post.comments}
             renderItem={renderComment}
             keyExtractor={(item, index) => index.toString()}
-            style={styles.commentsList} /></>
+            style={styles.commentsList} />
+          </ScrollView>
+          </View>
       )}
     </View>
   );
