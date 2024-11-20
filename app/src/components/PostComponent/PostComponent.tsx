@@ -6,7 +6,7 @@ import { styles } from './styles';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { toggleLike, getLikesCount, isUserLiked } from '../../Data_Control/Like';
 import { auth } from '../../Screens/FireBase/firebaseConfig';
-import { toggleComment, getComments } from '../../Data_Control/Comments/Comments';
+import { addComment, getComments } from '../../Data_Control/Comments/Comments';
 interface PostComponentProps {
   postId: string;
 }
@@ -43,7 +43,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
     try {
       const currentUserUid = auth.currentUser?.uid; // UID do usuário autenticado
       if (currentUserUid) {
-        await toggleComment(postId, currentUserUid, commentText); // Alterna o estado do comentário
+        await addComment(postId, currentUserUid, commentText); // Alterna o estado do comentário
         const updatedComments = await getComments(postId); // Atualiza a lista de comentários
         setPost((prevPost: any) => ({
           ...prevPost,
@@ -53,13 +53,13 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
         console.error('Usuário não autenticado');
       }
     } catch (error) {
-      console.error('Erro ao alternar comentário:', error);
+      console.error('Erro ao alternar comentário1111:', error);
     }
   };
-  const renderComment = ({ item }: { item: { userId: string; commentText: string; createdAt: Date } }) => (
+  const renderComment = ({ item }: { item: { username: string; commentText: string; createdAt: Date } }) => (
     
     <View style={styles.comment}>
-      <Text style={styles.commentUser}>{item.userId}</Text>
+      <Text style={styles.commentUser}>{item.username}</Text>
       <Text style={styles.commentText}>{item.commentText}</Text>
       <Text style={styles.commentDate}>{new Date(item.createdAt).toLocaleDateString()}</Text>
     </View>
