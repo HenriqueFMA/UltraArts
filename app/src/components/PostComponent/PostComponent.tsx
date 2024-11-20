@@ -13,6 +13,7 @@ interface PostComponentProps {
 
 const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
   const [isLikedVisible, setIsLikedVisible] = useState(false);  // Exibe coração vermelho se curtido
+  const [isCommentVisible, setIsCommentVisible] = useState(false);  // Exibe balão de comentário se comentado
   const [post, setPost] = useState<any | null>(null);
   const [user, setUser] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -39,7 +40,10 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
       console.error('Erro ao atualizar curtida:', error);
     }
   };
-  const handleToggleComment = async (commentText: string) => {
+  const handleToggleComment = () => { 
+    setIsCommentVisible((prevState) => !prevState);  // Alterna a visibilidade do balão de comentário
+  }
+  const newComment = async (commentText: string) => {
     try {
       const currentUserUid = auth.currentUser?.uid; // UID do usuário autenticado
       if (currentUserUid) {
@@ -117,6 +121,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
     <Image source={{ uri: item }} style={styles.carouselImage} />
   );
 
+
   return (
     <View style={styles.container}>
       {/* Exibição do Post */}
@@ -152,6 +157,12 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
             />
             <Text style={styles.likes}>{post.likes}</Text>  {/* Exibe a contagem de curtidas */}
           </TouchableOpacity>
+          <TouchableOpacity style={styles.containerButton} onPress={handleToggleComment}>
+            <AntDesign
+              name={isCommentVisible ? 'file1' : 'filetext1'}  // Exibe o ícone de texto preenchido ou vazio
+              size={24}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.containerBio}>
           <Text style={styles.username}>{user?.username || 'Usuário desconhecido'}</Text>
@@ -162,23 +173,20 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
         </Text>
       </View>
       {/* Campo de comentário */}
-      <View style={styles.commentInputContainer}>
-        <TextInput
-          style={styles.commentInput}
-          placeholder="Adicione um comentário..."
-          value={newCommentText}
-          onChangeText={setNewCommentText}
-        />
-        <Button title="Comentar" onPress={() => handleToggleComment(newCommentText)} />
-      </View>
-
-      {/* Lista de Comentários */}
-      <FlatList
-        data={post.comments}
-        renderItem={renderComment}
-        keyExtractor={(item, index) => index.toString()}
-        style={styles.commentsList}
-      />
+      {isCommentVisible && (
+        <><View style={styles.commentInputContainer}>
+          <TextInput
+            style={styles.commentInput}
+            placeholder="Adicione um comentário..."
+            value={newCommentText}
+            onChangeText={setNewCommentText} />
+          <Button title="Comentar" onPress={() => newComment(newCommentText)} />
+        </View><FlatList
+            data={post.comments}
+            renderItem={renderComment}
+            keyExtractor={(item, index) => index.toString()}
+            style={styles.commentsList} /></>
+      )}
     </View>
   );
 };
