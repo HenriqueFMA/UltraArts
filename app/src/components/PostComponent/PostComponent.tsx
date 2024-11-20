@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, Image, FlatList, ActivityIndicator, TouchableOpacity, Button, TextInput } from 'react-native';
 import { getPost } from '../../Data_Control/PostService';
 import getUserProfile from '../../Data_Control/userServise';
 import { styles } from './styles';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { toggleLike, getLikesCount, isUserLiked } from '../../Data_Control/Like';
 import { auth } from '../../Screens/FireBase/firebaseConfig';
-
+import { toggleComment, getComments } from '../../Data_Control/Comments/Comments';
 interface PostComponentProps {
   postId: string;
 }
@@ -16,7 +16,10 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
   const [post, setPost] = useState<any | null>(null);
   const [user, setUser] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  
 
+  const [newCommentText, setNewCommentText] = useState<string>('');
+  
   // Função que trata o clique para curtir/descurtir
   const handleToggleLike = async () => {
     try {
@@ -36,7 +39,31 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
       console.error('Erro ao atualizar curtida:', error);
     }
   };
-
+  const handleToggleComment = async (commentText: string) => {
+    try {
+      const currentUserUid = auth.currentUser?.uid; // UID do usuário autenticado
+      if (currentUserUid) {
+        await toggleComment(postId, currentUserUid, commentText); // Alterna o estado do comentário
+        const updatedComments = await getComments(postId); // Atualiza a lista de comentários
+        setPost((prevPost: any) => ({
+          ...prevPost,
+          comments: updatedComments, // Atualiza os comentários
+        }));
+      } else {
+        console.error('Usuário não autenticado');
+      }
+    } catch (error) {
+      console.error('Erro ao alternar comentário:', error);
+    }
+  };
+  const renderComment = ({ item }: { item: { userId: string; commentText: string; createdAt: Date } }) => (
+    
+    <View style={styles.comment}>
+      <Text style={styles.commentUser}>{item.userId}</Text>
+      <Text style={styles.commentText}>{item.commentText}</Text>
+      <Text style={styles.commentDate}>{new Date(item.createdAt).toLocaleDateString()}</Text>
+    </View>
+  );
   useEffect(() => {
     const userId = auth.currentUser?.uid;
 
@@ -63,6 +90,11 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
           const liked = await isUserLiked(postId, userId);
           setIsLikedVisible(liked);  // Define se o post foi curtido ou não
         }
+        const comments = await getComments(postId);
+        setPost((prevPost: any) => ({
+          ...prevPost,
+          comments: comments,
+        }));
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
       } finally {
@@ -87,6 +119,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
 
   return (
     <View style={styles.container}>
+      {/* Exibição do Post */}
       <View style={styles.userInfo}>
         {user?.profilePicture ? (
           <Image source={{ uri: user.profilePicture }} style={styles.profileImage} />
@@ -99,7 +132,9 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
       {post.content && post.content.length > 0 && (
         <FlatList
           data={post.content}
-          renderItem={renderImage}
+          renderItem={({ item }: { item: string }) => (
+            <Image source={{ uri: item }} style={styles.carouselImage} />
+          )}
           keyExtractor={(item, index) => index.toString()}
           horizontal
           pagingEnabled
@@ -107,7 +142,6 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
           style={styles.carousel}
         />
       )}
-
       <View style={styles.containerInfoPost}>
         <View style={styles.containerButton}>
           <TouchableOpacity style={styles.containerButton} onPress={handleToggleLike}>
@@ -127,6 +161,24 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
           Publicado em: {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : 'Data inválida'}
         </Text>
       </View>
+      {/* Campo de comentário */}
+      <View style={styles.commentInputContainer}>
+        <TextInput
+          style={styles.commentInput}
+          placeholder="Adicione um comentário..."
+          value={newCommentText}
+          onChangeText={setNewCommentText}
+        />
+        <Button title="Comentar" onPress={() => handleToggleComment(newCommentText)} />
+      </View>
+
+      {/* Lista de Comentários */}
+      <FlatList
+        data={post.comments}
+        renderItem={renderComment}
+        keyExtractor={(item, index) => index.toString()}
+        style={styles.commentsList}
+      />
     </View>
   );
 };

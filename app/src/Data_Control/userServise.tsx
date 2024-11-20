@@ -110,7 +110,7 @@ export const updateUserProfile = async ({ userId, bio, username, profileImage }:
     return { success: true, message: 'Profile updated successfully' };
   } catch (error) {
     console.error('Erro ao atualizar perfil:', error);
-    return { success: false, message: `An error occurred: ${error.message}` };
+    return { success: false, message: `An error occurred: ${(error as Error).message}` };
   }
 };
 

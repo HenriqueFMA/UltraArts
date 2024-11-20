@@ -14,7 +14,7 @@ import BarraNavegacao from '../../components/BarraDeNavegacao/Index';
 import { fetchUserPosts } from "../../Data_Control/PostService";
 import { RootStackParamList } from '../../Data_Control/Types'; // Tipagem de navegação
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import { getFollowersCount, getFollowingCount } from "../../Data_Control/Follow";
 // Tipagem de navegação
 type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
 
@@ -23,6 +23,8 @@ interface UserData {
   profilePicture?: string;
   followers: number;
   following: number;
+  followersList?: string[];
+  followingList?: string[];
   description?: string;
   fullName: string;
 }
@@ -58,6 +60,7 @@ const Profile: React.FC = () => {
           const posts = await fetchUserPosts(otherUserId || userId);
           console.log("User posts:", posts); // Verifique se os posts estão sendo carregados
           setUserPosts(posts);
+          
         } catch (error) {
           setError("Erro ao carregar os dados do usuário.");
         }
@@ -124,7 +127,7 @@ const Profile: React.FC = () => {
 
             {/* Exibir botão de editar perfil ou seguir com base no perfil mostrado */}
             {isOwnProfile ? (
-              <TouchableOpacity style={styles.botaoPerfil} onPress={() => navigation.navigate('updateProfile')}>
+              <TouchableOpacity style={styles.botaoPerfil} onPress={() => navigation.navigate('UpdateProfile' as never)}>
                 <Text style={styles.textoBotao}>Editar perfil</Text>
               </TouchableOpacity>
             ) : (

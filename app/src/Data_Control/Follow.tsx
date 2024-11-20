@@ -25,3 +25,11 @@ async function getFollowersCount(userId: string): Promise<number> {
     return followerDocs.size;
 }
 export { getFollowersCount };
+
+async function getFollowingCount(userId: string): Promise<number> {
+    const followingCollectionRef = collection(firestore, `Users/${userId}/Following`);
+    const followingDocs = await getDocs(followingCollectionRef);
+
+    return followingDocs.size;
+}
+export { getFollowingCount };
