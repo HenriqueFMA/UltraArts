@@ -72,6 +72,7 @@ const PostProfile: React.FC = () => {
         )}
       </ScrollView>
     </View>
+    
   );
 };
 
