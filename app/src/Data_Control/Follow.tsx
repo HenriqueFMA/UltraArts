@@ -36,7 +36,7 @@ async function toggleFollow(followingId: string): Promise<string | void> {
             // Caso o seguidor já exista, remove (unfollow)
             await deleteDoc(followRef);
             await deleteDoc(userFollowingRef);
-            console.log('Você deixou de seguir este usuário.');
+            console.log('Usuário: ', followerId, ' deixou de seguir usuário: ', followingId);
             return 'Você deixou de seguir este usuário.';
         } else {
             // Caso o seguidor não exista, adiciona (follow)
@@ -52,7 +52,7 @@ async function toggleFollow(followingId: string): Promise<string | void> {
                 followedAt: timestamp,
             });
 
-            console.log('Você está seguindo este usuário.');
+            console.log('Usuário: ', followerId, 'está seguindo usuário: ', followingId);   
             return 'Você está seguindo este usuário.';
         }
     } catch (error) {
@@ -63,21 +63,15 @@ async function toggleFollow(followingId: string): Promise<string | void> {
 
 export { toggleFollow };
 
-
-const db = getFirestore(); // Renomeie para `db` para evitar conflitos
-
 export const checkIfUserIsFollowing = async (currentUserId: string, otherUserId: string): Promise<boolean> => {
     try {
-      // Referência ao documento na subcoleção "Following" do usuário atual
-      const userFollowingRef = doc(db, `Users/${currentUserId}/Following/${otherUserId}`);
-      const followingDoc = await getDoc(userFollowingRef);
-  
-      // Verifica se o documento existe, ou seja, se o usuário atual está seguindo o outro usuário
-      return followingDoc.exists();
+        const userFollowingRef = doc(firestore, `Follow/${currentUserId}/Following/${otherUserId}`);
+        const followingDoc = await getDoc(userFollowingRef);
+        return followingDoc.exists(); // Retorna verdadeiro se o usuário está seguindo
     } catch (error) {
-      console.error('Erro ao verificar seguimento:', error);
-      return false;
+        console.error('Erro ao verificar seguimento:', error);
+        return false;
     }
-  };
-  
+};
+
 
