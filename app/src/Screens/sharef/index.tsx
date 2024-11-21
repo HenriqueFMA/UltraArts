@@ -71,7 +71,7 @@ const UserSearchScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
+   <View style={styles.body}>
       <View style={styles.header}>
   <TouchableOpacity style={styles.Arrowbacksharp} onPress={() => navigation.goBack()}>
     <Feather name="arrow-left" size={35} color="#fff" />
@@ -89,6 +89,7 @@ const UserSearchScreen = () => {
 
 </View>
 </View>
+     <View style={styles.container}>
 
      <View style={styles.containerList}>
      <FlatList
@@ -100,6 +101,7 @@ const UserSearchScreen = () => {
      </View>
 
     </View>
+   </View>
   );
 };
 

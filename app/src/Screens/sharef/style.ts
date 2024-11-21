@@ -5,13 +5,18 @@ export const styles=StyleSheet.create({
     flex: 1,
     backgroundColor: '#f9f9f9',
     width: '100%',
+    borderTopLeftRadius: 55,
+    borderTopRightRadius: 24,
+  },
+  body: {
+    flex: 1,
+    backgroundColor: '#297ac9',
+    
   },
   header: {
     backgroundColor:"#297ac9",
-    width: "100%",
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 10,
   },
   Arrowbacksharp: {
     marginTop: 0,
@@ -74,8 +79,7 @@ export const styles=StyleSheet.create({
     marginTop: 20,
   },
   containerList:{
-    borderTopLeftRadius: 55,
-    borderTopRightRadius: 24,
+
     flex: 1,
     padding: 10,
   }

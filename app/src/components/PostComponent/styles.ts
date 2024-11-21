@@ -110,4 +110,29 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.secondaryText,
   },
+
+ 
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    color: 'black',
+    textAlign: 'center',
+    
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fundo embaçado
+    maxHeight: '70%', // Limita a altura do modal para não cobrir toda a tela
+    position: 'relative', // Permite que o modal fique sobreposto aos outros elementos
+    marginTop: 300, // Ajuste a posição vertical conforme necessário
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 16,
+    height: '100%', // Garante que o conteúdo ocupe toda a altura definida pelo modalContainer
+  },
+  
 });

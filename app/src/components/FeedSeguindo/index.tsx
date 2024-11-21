@@ -57,7 +57,7 @@ const FeedSeguindo: React.FC = () => {
   }, [userId]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 , marginTop: 20 , gap:10}}>
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
         {loading ? (
           <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 20 }} />
