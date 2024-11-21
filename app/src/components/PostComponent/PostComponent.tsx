@@ -15,7 +15,6 @@ interface PostComponentProps {
 
 const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
   const [isLikedVisible, setIsLikedVisible] = useState(false); // Exibe coração vermelho se curtido
-  const [isLikedVisible, setIsLikedVisible] = useState(false);  // Exibe coração vermelho se curtido
   const [isCommentVisible, setIsCommentVisible] = useState(false);  // Exibe balão de comentário se comentado
   const [post, setPost] = useState<any | null>(null);
   const [user, setUser] = useState<any | null>(null);
@@ -171,12 +170,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
               size={24}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.containerButton} onPress={handleToggleComment}>
-            <AntDesign
-              name={isCommentVisible ? 'file1' : 'filetext1'}  // Exibe o ícone de texto preenchido ou vazio
-              size={24}
-            />
-          </TouchableOpacity>
+          
         </View>
         <View style={styles.containerBio}>
           <Text style={styles.username}>{user?.username || 'Usuário desconhecido'}</Text>
