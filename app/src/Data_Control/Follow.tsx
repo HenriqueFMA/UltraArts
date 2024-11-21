@@ -80,3 +80,4 @@ export const checkIfUserIsFollowing = async (currentUserId: string, otherUserId:
     }
   };
   
+

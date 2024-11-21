@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'; 
 
 // Definindo cores reutilizáveis
 const colors = {
@@ -6,11 +6,12 @@ const colors = {
   secondaryText: '#888',
   background: '#fff',
 };
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
   },
   userInfo: {
     flexDirection: 'row',
@@ -25,11 +26,12 @@ export const styles = StyleSheet.create({
   },
   noProfileImageText: {
     fontSize: 14,
-    color: '#888',
+    color: colors.secondaryText,
   },
   username: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: colors.primaryText,
   },
   carousel: {
     marginVertical: 10,
@@ -42,13 +44,14 @@ export const styles = StyleSheet.create({
   },
   date: {
     fontSize: 12,
-    color: '#888',
+    color: colors.secondaryText,
     marginVertical: 1,
   },
   title: {
     fontSize: 14,
     marginVertical: 1,
-    fontWeight:500,
+    fontWeight: '500',
+    color: colors.primaryText,
   },
   likes: {
     fontSize: 18,
@@ -62,12 +65,49 @@ export const styles = StyleSheet.create({
     flexDirection: 'row', // Coloca os elementos lado a lado
     alignItems: 'center', // Alinha verticalmente
     marginVertical: 10,
-    gap: 10,  
+    gap: 10,
   },
-  containerButton:{
+  containerButton: {
     flexDirection: 'row', // Coloca os elementos lado a lado
     alignItems: 'center', // Alinha verticalmente
     gap: 10,
+  },
 
-  }
+  // Estilos de comentários
+  commentInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
+  },
+  commentInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    marginRight: 10,
+  },
+  commentsList: {
+    marginTop: 10,
+  },
+  comment: {
+    marginVertical: 5,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    backgroundColor: '#f9f9f9', // Cor de fundo para os comentários
+  },
+  commentUser: {
+    fontWeight: 'bold',
+    color: colors.primaryText,
+  },
+  commentText: {
+    marginVertical: 5,
+    color: colors.primaryText,
+  },
+  commentDate: {
+    fontSize: 12,
+    color: colors.secondaryText,
+  },
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
+
 import { View, Text, Image, FlatList, ActivityIndicator, TouchableOpacity, Button, TextInput } from 'react-native';
 import { getPost } from '../../Data_Control/PostService';
 import getUserProfile from '../../Data_Control/userServise';
@@ -20,8 +20,8 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
   const [post, setPost] = useState<any | null>(null);
   const [user, setUser] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
   
+
 
   const [newCommentText, setNewCommentText] = useState<string>('');
   
@@ -164,6 +164,12 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
               color={isLikedVisible ? 'red' : 'black'}
             />
             <Text style={styles.likes}>{post.likes}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.containerButton} onPress={handleToggleComment}>
+            <AntDesign
+              name={isCommentVisible ? 'file1' : 'filetext1'}  // Exibe o ícone de texto preenchido ou vazio
+              size={24}
+            />
           </TouchableOpacity>
           <TouchableOpacity style={styles.containerButton} onPress={handleToggleComment}>
             <AntDesign
