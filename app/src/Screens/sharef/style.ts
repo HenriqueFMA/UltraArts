@@ -3,8 +3,38 @@ import { StyleSheet } from 'react-native';
 export const styles=StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#f9f9f9',
+    width: '100%',
+  },
+  header: {
+    backgroundColor:"#297ac9",
+    width: "100%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+  },
+  Arrowbacksharp: {
+    marginTop: 0,
+    alignSelf: 'flex-start',
+    backgroundColor:"#297ac9",
+
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 30,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    width: '90%',
+    height: 40,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 3,
   },
   title: {
     fontSize: 20,
@@ -13,12 +43,9 @@ export const styles=StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    height: 40,
-    borderColor: '#ddd',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 20,
+    flex: 1, // Faz o TextInput ocupar o restante do espaço
+    height: '100%',
+    fontSize: 16,
   },
   userItem: {
     flexDirection: 'row',
@@ -46,4 +73,10 @@ export const styles=StyleSheet.create({
     color: '#999',
     marginTop: 20,
   },
+  containerList:{
+    borderTopLeftRadius: 55,
+    borderTopRightRadius: 24,
+    flex: 1,
+    padding: 10,
+  }
 });
