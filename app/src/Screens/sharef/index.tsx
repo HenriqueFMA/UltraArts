@@ -6,6 +6,8 @@ import { styles } from './style';
 import { useNavigation } from '@react-navigation/native'; // Importando o hook de navegação
 import { RootStackParamList } from '../../Data_Control/Types'; // Importando a tipagem de navegação
 import { StackNavigationProp } from '@react-navigation/stack'; // Importando a tipagem de navegação
+import Feather from "@expo/vector-icons/Feather";
+import Fontisto from '@expo/vector-icons/Fontisto';
 
 const UserSearchScreen = () => {
   const [searchText, setSearchText] = useState('');
@@ -70,19 +72,33 @@ const UserSearchScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Pesquisar Usuário</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite o nome de usuário"
-        value={searchText}
-        onChangeText={handleSearch}
-      />
-      <FlatList
+      <View style={styles.header}>
+  <TouchableOpacity style={styles.Arrowbacksharp} onPress={() => navigation.goBack()}>
+    <Feather name="arrow-left" size={35} color="#fff" />
+  </TouchableOpacity>
+<View style={styles.inputContainer}>
+<TextInput
+    style={styles.input}
+    placeholder="Digite o nome de usuário" 
+    placeholderTextColor="#ccc"
+    value={searchText}
+    
+    onChangeText={handleSearch}
+  />
+  <Fontisto name="zoom" size={24} color="#ccc" />
+
+</View>
+</View>
+
+     <View style={styles.containerList}>
+     <FlatList
         data={userList}
         keyExtractor={(item) => item.ID} // Usando o campo ID para chave
         renderItem={renderUserItem}
         ListEmptyComponent={() => <Text style={styles.noResults}>Nenhum usuário encontrado.</Text>}
       />
+     </View>
+
     </View>
   );
 };

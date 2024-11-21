@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import { View, Text, Image, FlatList, ActivityIndicator, TouchableOpacity, Button, TextInput } from 'react-native';
 import { getPost } from '../../Data_Control/PostService';
 import getUserProfile from '../../Data_Control/userServise';
@@ -13,6 +14,7 @@ interface PostComponentProps {
 }
 
 const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
+  const [isLikedVisible, setIsLikedVisible] = useState(false); // Exibe coração vermelho se curtido
   const [isLikedVisible, setIsLikedVisible] = useState(false);  // Exibe coração vermelho se curtido
   const [isCommentVisible, setIsCommentVisible] = useState(false);  // Exibe balão de comentário se comentado
   const [post, setPost] = useState<any | null>(null);
@@ -20,20 +22,21 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
   const [loading, setLoading] = useState<boolean>(true);
   
 
+
   const [newCommentText, setNewCommentText] = useState<string>('');
   
   // Função que trata o clique para curtir/descurtir
   const handleToggleLike = async () => {
     try {
-      const currentUserUid = auth.currentUser?.uid;  // UID do usuário autenticado
+      const currentUserUid = auth.currentUser?.uid;
       if (currentUserUid) {
-        await toggleLike(postId, currentUserUid);  // Alterna o estado de curtida
-        const updatedLikesCount = await getLikesCount(postId);  // Atualiza a contagem de curtidas
+        await toggleLike(postId, currentUserUid);
+        const updatedLikesCount = await getLikesCount(postId);
         setPost((prevPost: any) => ({
           ...prevPost,
-          likes: updatedLikesCount,  // Atualiza a contagem de curtidas
+          likes: updatedLikesCount,
         }));
-        setIsLikedVisible((prevState) => !prevState);  // Alterna a visibilidade do coração
+        setIsLikedVisible((prevState) => !prevState);
       } else {
         console.error('Usuário não autenticado');
       }
@@ -73,27 +76,29 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
     const userId = auth.currentUser?.uid;
 
     const fetchData = async () => {
+      console.log('Carregando dados do post...');
       try {
         const postData = await getPost(postId);
+        console.log('Dados do post carregados:', postData);
         setPost(postData);
 
-        // Verifica se o post foi encontrado
         if (postData?.userId) {
           const userData = await getUserProfile(postData.userId);
+          console.log('Dados do usuário carregados:', userData);
           setUser(userData);
         }
 
-        // Carrega a contagem de curtidas do post
         const likesCount = await getLikesCount(postId);
+        console.log('Contagem de curtidas carregada:', likesCount);
         setPost((prevPost: any) => ({
           ...prevPost,
-          likes: likesCount,  // Atualiza a contagem de curtidas
+          likes: likesCount,
         }));
 
-        // Verifica se o usuário já curtiu o post
         if (userId) {
           const liked = await isUserLiked(postId, userId);
-          setIsLikedVisible(liked);  // Define se o post foi curtido ou não
+          console.log(`O usuário já curtiu este post? ${liked}`);
+          setIsLikedVisible(liked);
         }
         const comments = await getComments(postId);
         setPost((prevPost: any) => ({
@@ -103,6 +108,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
       } finally {
+        console.log('Finalizado carregamento dos dados.');
         setLoading(false);
       }
     };
@@ -111,7 +117,8 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
   }, [postId]);
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    console.log('Carregando...');
+    return null; // Retorna nada enquanto carrega
   }
 
   if (!post) {
@@ -152,11 +159,17 @@ const PostComponent: React.FC<PostComponentProps> = ({ postId }) => {
         <View style={styles.containerButton}>
           <TouchableOpacity style={styles.containerButton} onPress={handleToggleLike}>
             <AntDesign
-              name={isLikedVisible ? 'heart' : 'hearto'}  // Exibe o ícone de coração preenchido ou vazio
+              name={isLikedVisible ? 'heart' : 'hearto'}
               size={24}
-              color={isLikedVisible ? 'red' : 'black'}  // Cor do coração (vermelho se curtido)
+              color={isLikedVisible ? 'red' : 'black'}
             />
-            <Text style={styles.likes}>{post.likes}</Text>  {/* Exibe a contagem de curtidas */}
+            <Text style={styles.likes}>{post.likes}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.containerButton} onPress={handleToggleComment}>
+            <AntDesign
+              name={isCommentVisible ? 'file1' : 'filetext1'}  // Exibe o ícone de texto preenchido ou vazio
+              size={24}
+            />
           </TouchableOpacity>
           <TouchableOpacity style={styles.containerButton} onPress={handleToggleComment}>
             <AntDesign

@@ -70,6 +70,7 @@ export const styles = StyleSheet.create({
   containerButton: {
     flexDirection: 'row', // Coloca os elementos lado a lado
     alignItems: 'center', // Alinha verticalmente
+    gap: 10,
   },
 
   // Estilos de comentários
