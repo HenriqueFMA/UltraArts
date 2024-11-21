@@ -61,7 +61,17 @@ interface UpdateUserData {
   username?: string;
   profileImage?: string;
 }
+export async function getFollowingUsers(userId: string) {
+  try {
+    const followingRef = collection(firestore , 'Follow', userId, 'Following');
+    const followingSnapshot = await getDocs(followingRef);
 
+    const followingIds = followingSnapshot.docs.map(doc => doc.id);
+    console.log('Usuários seguidos:', followingIds);
+  } catch (error) {
+    console.error('Erro ao buscar usuários seguidos:', error);
+  }
+}
 export const updateUserProfile = async ({ userId, bio, username, profileImage }: UpdateUserData) => {
   try {
     console.log(`Buscando usuário com ID: ${userId}`);

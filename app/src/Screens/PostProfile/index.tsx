@@ -67,7 +67,7 @@ const PostProfile: React.FC = () => {
           <Text>Sem posts para exibir.</Text>
         ) : (
           posts.map(post => (
-            <PostComponent key={post.id} postId={post.id} />
+            <PostComponent key={post.id} postId={post.id}/>
           ))
         )}
       </ScrollView>

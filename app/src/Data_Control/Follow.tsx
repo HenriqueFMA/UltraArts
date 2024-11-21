@@ -24,10 +24,10 @@ async function toggleFollow(followingId: string): Promise<string | void> {
         const followerId = currentUser.uid; // ID do seguidor (quem está logado)
 
         // Referência ao documento na subcoleção "Followers" do usuário que será seguido
-        const followRef = doc(firestore, `Users/${followingId}/Followers/${followerId}`);
+        const followRef = doc(firestore, `Follow/${followingId}/Followers/${followerId}`);
 
         // Referência à subcoleção "Following" do usuário logado
-        const userFollowingRef = doc(firestore, `Users/${followerId}/Following/${followingId}`);
+        const userFollowingRef = doc(firestore, `Follow/${followerId}/Following/${followingId}`);
 
         // Verifica se o seguidor já existe na lista de seguidores do usuário
         const docSnap = await getDoc(followRef);
