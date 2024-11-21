@@ -174,7 +174,7 @@ const Profile: React.FC = () => {
             ) : (
               <TouchableOpacity
                 style={styles.botaoPerfil}
-                onPress={() => navigation.navigate("updateProfile")}
+                onPress={() => navigation.navigate("UpdateProfile")}
               >
                 <Text style={styles.textoBotao}>Editar perfil</Text>
               </TouchableOpacity>
