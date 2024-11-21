@@ -15,7 +15,7 @@ import { fetchUserPosts } from "../../Data_Control/PostService";
 import { RootStackParamList } from "../../Data_Control/Types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { toggleFollow, checkIfUserIsFollowing } from "../../Data_Control/Follow";
-
+import { getFollowerNumber, getFollowingNumber } from "../../Data_Control/Follow";
 type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, "Profile">;
 
 interface UserData {
@@ -52,15 +52,15 @@ const Profile: React.FC = () => {
     try {
       await toggleFollow(otherUserId!);  // Alterna o status de seguir/deseguir
       setIsFollowing(!isFollowing);
-
+  
       const updatedFollowersCount = await getFollowersCount(otherUserId || auth.currentUser?.uid!);
-      setFollowersCount(updatedFollowersCount);
+      setFollowersCount(updatedFollowersCount + 1);  // Atualiza o número de seguidores
     } catch (error) {
       setError("Erro ao seguir/deseguir.");
       console.error("Erro ao seguir/deseguir:", error);
     }
   };
-
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -69,19 +69,23 @@ const Profile: React.FC = () => {
           setError("Usuário não autenticado.");
           return;
         }
-
+  
+        // Pega os dados do perfil do usuário
         const fetchedUserData = await getUserProfile(otherUserId || userId);
         setUserData(fetchedUserData || null);
-
+  
+        // Pega os posts do usuário
         const posts = await fetchUserPosts(otherUserId || userId);
         setUserPosts(posts);
-
-        const followerCount = await getFollowersCount(otherUserId || userId);
+  
+        // Pega o número de seguidores e seguidos
+        const followerCount = await getFollowerNumber(otherUserId || userId);
         setFollowersCount(followerCount);
-
-        const followingCount = await getFollowingCount(otherUserId || userId);
+  
+        const followingCount = await getFollowingNumber(otherUserId || userId);
         setFollowingCount(followingCount);
-
+  
+        // Verifica se o usuário está seguindo este perfil
         const isUserFollowingResult = await checkIfUserIsFollowing(auth.currentUser?.uid!, otherUserId || userId);
         setIsFollowing(isUserFollowingResult);
       } catch (error) {
@@ -89,7 +93,7 @@ const Profile: React.FC = () => {
         console.error(error);
       }
     };
-
+  
     fetchUserData();
   }, [otherUserId]);
 
@@ -174,7 +178,7 @@ const Profile: React.FC = () => {
             ) : (
               <TouchableOpacity
                 style={styles.botaoPerfil}
-                onPress={() => navigation.navigate("updateProfile")}
+                onPress={() => navigation.navigate("UpdateProfile")}
               >
                 <Text style={styles.textoBotao}>Editar perfil</Text>
               </TouchableOpacity>
