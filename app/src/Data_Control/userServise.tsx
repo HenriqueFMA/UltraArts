@@ -110,7 +110,7 @@ export const updateUserProfile = async ({ userId, bio, username, profileImage }:
     return { success: true, message: 'Profile updated successfully' };
   } catch (error) {
     console.error('Erro ao atualizar perfil:', error);
-    return { success: false, message: `An error occurred: ${error.message}` };
+    return { success: false, message: `An error occurred: ${(error as Error).message}` };
   }
 };
 
@@ -168,3 +168,88 @@ export const searchUserProfileByUsername = async (username: string) => {
     throw new Error('Erro ao buscar o perfil do usuário.');
   }
 };
+
+
+
+/**
+ * Obtém a contagem de seguidores de um usuário.
+ * 
+ * @param userId - ID do usuário cuja contagem de seguidores será buscada.
+ * @returns Número de seguidores do usuário.
+ */
+export const getFollowersCount = async (userId: string): Promise<number> => {
+  try {
+    // Referência à subcoleção "Followers" do usuário
+    const followersRef = collection(firestore, `Users/${userId}/Followers`);
+
+    // Obtem todos os documentos na subcoleção
+    const followersSnapshot = await getDocs(followersRef);
+
+    // Retorna o número de seguidores
+    return followersSnapshot.size;
+  } catch (error) {
+    console.error("Erro ao obter contagem de seguidores:", error);
+    return 0;
+  }
+};
+ 
+export const getFollowingList = async (userId: string): Promise<string[]> => {
+  try {
+    const followingRef = collection(firestore, `Users/${userId}/Following`);
+    const followingSnapshot = await getDocs(followingRef);
+
+    const followingList: string[] = [];
+    followingSnapshot.forEach((doc) => {
+      followingList.push(doc.id); // ID de cada usuário seguido
+    });
+
+    return followingList;
+  } catch (error) {
+    console.error("Erro ao obter a lista de usuários que está seguindo:", error);
+    return [];
+  }
+};
+/**
+ * Obtém a lista de IDs dos seguidores de um usuário.
+ *
+ * @param userId - ID do usuário cujos seguidores serão buscados.
+ * @returns Lista de IDs dos seguidores.
+ */
+export const getFollowersList = async (userId: string): Promise<string[]> => {
+  try {
+    const followersRef = collection(firestore, `Users/${userId}/Followers`);
+    const followersSnapshot = await getDocs(followersRef);
+
+    const followersList: string[] = [];
+    followersSnapshot.forEach((doc) => {
+      followersList.push(doc.id); // ID de cada seguidor
+    });
+
+    return followersList;
+  } catch (error) {
+    console.error("Erro ao obter a lista de seguidores:", error);
+    return [];
+  }
+};
+/**
+ * Obtém a contagem de usuários que o usuário está seguindo.
+ *
+ * @param userId - ID do usuário cuja contagem de "seguindo" será buscada.
+ * @returns Número de usuários que o usuário está seguindo.
+ */
+export const getFollowingCount = async (userId: string): Promise<number> => {
+  try {
+    // Referência à subcoleção "Following" do usuário
+    const followingRef = collection(firestore, `Users/${userId}/Following`);
+
+    // Obtem todos os documentos na subcoleção
+    const followingSnapshot = await getDocs(followingRef);
+
+    // Retorna o número de usuários seguidos
+    return followingSnapshot.size;
+  } catch (error) {
+    console.error("Erro ao obter contagem de seguindo:", error);
+    return 0;
+  }
+};
+

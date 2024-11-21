@@ -32,9 +32,10 @@ export default function App() {
             <Stack.Screen options={{ headerShown: false }} name="Profile" component={Profile} />
             <Stack.Screen options={{ headerShown: false }} name="NewPost" component={NewPost} />
             <Stack.Screen options={{ headerShown: false }} name="UpdateProfile" component={UpdateProfile} />
-            <Stack.Screen options={{ headerShown: false }} name="SearchUserProfileScreen" component={SearchUserProfileScreen} />
             <Stack.Screen options={{ headerShown: false }} name="PostProfile" component={PostProfile} />
             <Stack.Screen options={{ headerShown: false }} name="Location" component={Location} />
+            <Stack.Screen options={{ headerShown: false }} name="SearchUserProfileScreen" component={SearchUserProfileScreen} />
+
           </>
         ) : (
           <>

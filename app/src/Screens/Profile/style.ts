@@ -23,7 +23,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     borderTopLeftRadius: 55,
     borderTopRightRadius: 0,
-    height: "100%",
+    minHeight:  600,
+
+  },
+  scrollContainer:{
+    flexGrow: 1,
   },
   texto: {
     fontSize: 16,
@@ -132,6 +136,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    paddingBottom:80,
   },
   postsGrid: {
     width: '33%', // Garante que cada item no grid ocupe um terço da tela
@@ -148,6 +153,22 @@ export const styles = StyleSheet.create({
       fontSize: 16,
       color: 'gray',
     },
-  
+    botaoSeguir: {
+      backgroundColor: '#3498db', // Azul para o botão de "Seguir"
+      borderRadius: 5,
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      marginVertical: 10,
+      alignItems: 'center',
+    },
+    
+    botaoSeguindo: {
+      backgroundColor: '#fff', // Verde para o botão de "Seguindo"
+      borderRadius: 5,
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      marginVertical: 10,
+      alignItems: 'center',
+    },
  
 });

@@ -10,5 +10,6 @@ export type RootStackParamList = {
     SearchUserProfileScreen: undefined;
     Location: undefined;
     Shop: undefined;
+    updateProfile: undefined;
   };
   

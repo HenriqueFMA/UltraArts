@@ -80,12 +80,12 @@ const CreatePostScreen: React.FC = () => {
       <TouchableOpacity style={styles.Arrowbacksharp} onPress={() => navigation.goBack()}>
         <Feather name="arrow-left" size={40} color="black" />
       </TouchableOpacity>
-      <Text style={styles.label}>Discrição</Text>
+      <Text style={styles.label}>Descrição</Text>
       <TextInput
         style={styles.input}
         value={title}
         onChangeText={setTitle}
-        placeholder="Digite a discrição do post"
+        placeholder="Digite a descrição do post"
       />
 
       <TouchableOpacity style={styles.button} onPress={pickImage}>
