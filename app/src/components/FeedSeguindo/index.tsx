@@ -5,9 +5,10 @@ import PostComponent from '../../components/PostComponent/PostComponent';
 import getFollowingUsers from '../../Screens/Home'; // Sua função getFollowingUsers
 import { fetchUserPostsList } from '../../Data_Control/PostService';
 import styles from './styles';
-import { firestore } from "../../Screens/FireBase/firebaseConfig";
+import { firestore, auth } from "../../Screens/FireBase/firebaseConfig";
 
 import { collection, getDocs } from 'firebase/firestore';
+import { CurrentRenderContext } from '@react-navigation/native';
 interface Post {
   id: string;
   userId: string;
@@ -23,7 +24,10 @@ interface PostComponentProps {
 const FeedSeguindo: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const userId = 'XNkqLeTYKucoLEhPI5tONuUUH2l2';
+  const userId = auth.currentUser?.uid;
+  if(!userId){
+    return <Text>Usuário não autenticado</Text>;
+  }
   async function getFollowingUsers(userId: string) {
     try {
       const followingRef = collection(firestore , 'Follow', userId, 'Following');
@@ -41,8 +45,8 @@ const FeedSeguindo: React.FC = () => {
     const fetchFollowingPosts = async () => {
       try {
         // Passo 1: Obter IDs dos usuários seguidos
-        const followingIds = await getFollowingUsers(userId);
-        console.log('Usuários seguidos:', followingIds);
+          const followingIds = await getFollowingUsers(userId);
+          console.log('Usuários seguidos:', followingIds);
 
         // Passo 2: Buscar os posts de cada usuário seguido
         const allPostsPromises = followingIds.map(async (userId: string) => {
